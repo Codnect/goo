@@ -14,6 +14,7 @@ type Struct interface {
 	GetEmbeddedInterfaceCount() int
 	GetEmbeddedStructs() []Struct
 	GetEmbeddedStructCount() int
+	Implements(i Interface) bool
 }
 
 type StructType struct {
@@ -92,4 +93,8 @@ func (typ StructType) GetEmbeddedStructs() []Struct {
 
 func (typ StructType) GetEmbeddedStructCount() int {
 	return 0
+}
+
+func (typ StructType) Implements(i Interface) bool {
+	return false
 }
