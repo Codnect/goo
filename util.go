@@ -16,11 +16,11 @@ func sanitizedName(str string) string {
 
 func getActualTypeFromBaseType(baseTyp baseType) Type {
 	if baseTyp.IsFunction() {
-		return nil
+		return newFunctionType(baseTyp)
 	} else if baseTyp.IsInterface() {
-		return nil
+		return newInterfaceType(baseTyp)
 	} else if baseTyp.IsStruct() {
-		return nil
+		return newStructType(baseTyp)
 	}
 	return baseTyp
 }
@@ -129,10 +129,28 @@ func getFunctionPackageName(val reflect.Value) string {
 	return fullName
 }
 
+func convertGoFieldToMemberField(goField reflect.StructField) Field {
+	field := newMemberField(goField.Name,
+		GetTypeFromGoType(goField.Type),
+		goField.Anonymous,
+		goField.Tag,
+		isExportedField(goField))
+	return field
+}
+
 func isExportedField(structField reflect.StructField) bool {
 	return unicode.IsUpper(rune(structField.Name[0]))
 }
 
 func isExportedMethod(method reflect.Method) bool {
 	return unicode.IsUpper(rune(method.Name[0]))
+}
+
+func convertGoMethodToMemberMethod(goMethod reflect.Method) Method {
+	method := newMemberMethod(goMethod.Type,
+		goMethod.Name,
+		isExportedMethod(goMethod),
+		goMethod.Func,
+	)
+	return method
 }
