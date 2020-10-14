@@ -11,6 +11,7 @@ type Type interface {
 	GetPackageFullName() string
 	GetGoType() reflect.Type
 	GetGoValue() reflect.Value
+	IsNumber() bool
 	IsFunction() bool
 	IsStruct() bool
 	IsInterface() bool
@@ -25,6 +26,7 @@ type baseType struct {
 	typ             reflect.Type
 	val             reflect.Value
 	kind            reflect.Kind
+	isNumber        bool
 }
 
 func newBaseType(typ reflect.Type, val reflect.Value) baseType {
@@ -35,6 +37,7 @@ func newBaseType(typ reflect.Type, val reflect.Value) baseType {
 		typ,
 		val,
 		typ.Kind(),
+		isNumber(typ),
 	}
 }
 
@@ -60,6 +63,10 @@ func (typ baseType) GetGoType() reflect.Type {
 
 func (typ baseType) GetGoValue() reflect.Value {
 	return typ.val
+}
+
+func (typ baseType) IsNumber() bool {
+	return typ.isNumber
 }
 
 func (typ baseType) IsFunction() bool {

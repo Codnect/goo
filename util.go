@@ -21,6 +21,16 @@ func getActualTypeFromBaseType(baseTyp baseType) Type {
 		return newInterfaceType(baseTyp)
 	} else if baseTyp.IsStruct() {
 		return newStructType(baseTyp)
+	} else if baseTyp.IsNumber() {
+		if isSignedInteger(baseTyp.typ) {
+			return newSignedInteger(baseTyp)
+		} else if isUnsignedInteger(baseTyp.typ) {
+			return newUnsignedInteger(baseTyp)
+		} else if isFloat(baseTyp.typ) {
+			return newFloat(baseTyp)
+		} else if isComplex(baseTyp.typ) {
+			return newFloat(baseTyp)
+		}
 	}
 	return baseTyp
 }
@@ -153,4 +163,48 @@ func convertGoMethodToMemberMethod(goMethod reflect.Method) Method {
 		goMethod.Func,
 	)
 	return method
+}
+
+func isNumber(typ reflect.Type) bool {
+	switch typ.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return true
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return true
+	case reflect.Float32, reflect.Float64, reflect.Complex64, reflect.Complex128:
+		return true
+	}
+	return false
+}
+
+func isSignedInteger(typ reflect.Type) bool {
+	switch typ.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return true
+	}
+	return false
+}
+
+func isUnsignedInteger(typ reflect.Type) bool {
+	switch typ.Kind() {
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return true
+	}
+	return false
+}
+
+func isFloat(typ reflect.Type) bool {
+	switch typ.Kind() {
+	case reflect.Float32, reflect.Float64:
+		return true
+	}
+	return false
+}
+
+func isComplex(typ reflect.Type) bool {
+	switch typ.Kind() {
+	case reflect.Complex64, reflect.Complex128:
+		return true
+	}
+	return false
 }

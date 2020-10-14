@@ -37,7 +37,7 @@ func getTypeFromCache(typ reflect.Type) Type {
 
 func putTypeIntoCache(typ Type) Type {
 	if !typ.IsInterface() && !typ.IsStruct() {
-		return nil
+		return typ
 	}
 	defer func() {
 		cacheTypeMu.Unlock()
