@@ -95,7 +95,8 @@ func GetType(obj interface{}) Type {
 	if typeFromCache != nil {
 		return typeFromCache
 	}
-	return putTypeIntoCache(createBaseType(typ, val))
+	baseTyp := createBaseType(typ, val)
+	return putTypeIntoCache(getActualTypeFromBaseType(baseTyp))
 }
 
 func GetTypeFromGoType(typ reflect.Type) Type {

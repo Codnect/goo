@@ -52,7 +52,7 @@ func getTypeName(typ reflect.Type, val reflect.Value) string {
 	case reflect.Func:
 		return getFunctionName(val)
 	}
-	return ""
+	return typ.Name()
 }
 
 func GetGoTypeAndValue(obj interface{}) (reflect.Type, reflect.Value) {
