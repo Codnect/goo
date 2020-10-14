@@ -84,7 +84,11 @@ func (typ baseType) String() string {
 
 func GetType(obj interface{}) Type {
 	typ, val := GetGoTypeAndValue(obj)
-	return createBaseType(typ, val)
+	typeFromCache := getTypeFromCache(typ)
+	if typeFromCache != nil {
+		return typeFromCache
+	}
+	return putTypeIntoCache(createBaseType(typ, val))
 }
 
 func GetTypeFromGoType(typ reflect.Type) Type {
@@ -93,6 +97,10 @@ func GetTypeFromGoType(typ reflect.Type) Type {
 	}
 	if typ.Kind() == reflect.Ptr {
 		typ = typ.Elem()
+	}
+	typeFromCache := getTypeFromCache(typ)
+	if typeFromCache != nil {
+		return typeFromCache
 	}
 	baseTyp := newBaseType(typ, reflect.Value{})
 	return getActualTypeFromBaseType(baseTyp)

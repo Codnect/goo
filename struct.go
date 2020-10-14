@@ -27,13 +27,17 @@ func newStructType(baseTyp baseType) StructType {
 }
 
 func (typ StructType) GetFields() []Field {
-	fields := make([]Field, 0)
+	fields := getFieldsFromCache(typ.GetFullName())
+	if fields != nil {
+		return fields
+	}
+	fields = make([]Field, 0)
 	fieldCount := typ.GetFieldCount()
 	for fieldIndex := 0; fieldIndex < fieldCount; fieldIndex++ {
 		field := typ.typ.Field(fieldIndex)
 		fields = append(fields, convertGoFieldToMemberField(field))
 	}
-	return fields
+	return putFieldsIntoCache(typ.GetFullName(), fields)
 }
 
 func (typ StructType) GetFieldCount() int {
@@ -41,7 +45,11 @@ func (typ StructType) GetFieldCount() int {
 }
 
 func (typ StructType) GetMethods() []Method {
-	methods := make([]Method, 0)
+	methods := getMethodsFromCache(typ.GetFullName())
+	if methods != nil {
+		return methods
+	}
+	methods = make([]Method, 0)
 	methodCount := typ.GetMethodCount()
 	for methodIndex := 0; methodIndex < methodCount; methodIndex++ {
 		method := typ.typ.Method(methodIndex)
