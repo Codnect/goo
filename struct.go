@@ -91,10 +91,10 @@ func (typ structType) GetEmbeddedStructs() []Struct {
 	return nil
 }
 
-func (typ StructType) GetEmbeddedStructCount() int {
+func (typ structType) GetEmbeddedStructCount() int {
 	return 0
 }
 
-func (typ StructType) Implements(i Interface) bool {
+func (typ structType) Implements(i Interface) bool {
 	return typ.GetGoType().Implements(i.GetGoType())
 }
