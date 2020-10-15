@@ -30,6 +30,7 @@ type Number interface {
 	GetNumberType() NumberType
 	GetBitSize() BitSize
 	Overflow(val interface{}) bool
+	ToString(val interface{}) string
 }
 
 type Integer interface {
@@ -89,6 +90,14 @@ func (integer signedIntegerType) NewInstance() interface{} {
 	return reflect.New(integer.GetGoType()).Elem().Interface()
 }
 
+func (integer signedIntegerType) ToString(val interface{}) string {
+	valType := GetType(val)
+	if !valType.IsNumber() || IntegerType != valType.(Number).GetNumberType() || !valType.(Integer).IsSigned() {
+		panic("Incompatible type : " + valType.GetName())
+	}
+	return fmt.Sprintf("%d", val)
+}
+
 type unsignedIntegerType struct {
 	baseType
 }
@@ -141,6 +150,14 @@ func (integer unsignedIntegerType) NewInstance() interface{} {
 	return reflect.New(integer.GetGoType()).Elem().Interface()
 }
 
+func (integer unsignedIntegerType) ToString(val interface{}) string {
+	valType := GetType(val)
+	if !valType.IsNumber() || IntegerType != valType.(Number).GetNumberType() || valType.(Integer).IsSigned() {
+		panic("Incompatible type : " + valType.GetName())
+	}
+	return fmt.Sprintf("%d", val)
+}
+
 type Float interface {
 	Number
 }
@@ -189,6 +206,14 @@ func (float floatType) NewInstance() interface{} {
 	return reflect.New(float.GetGoType()).Elem().Interface()
 }
 
+func (float floatType) ToString(val interface{}) string {
+	valType := GetType(val)
+	if !valType.IsNumber() || FloatType != valType.(Number).GetNumberType() {
+		panic("Incompatible type : " + valType.GetName())
+	}
+	return fmt.Sprintf("%f", val)
+}
+
 type Complex interface {
 	Number
 }
@@ -226,4 +251,12 @@ func (complex complexType) NewInstance() interface{} {
 		return reflect.New(complex.GetGoType()).Interface()
 	}
 	return reflect.New(complex.GetGoType()).Elem().Interface()
+}
+
+func (complex complexType) ToString(val interface{}) string {
+	valType := GetType(val)
+	if !valType.IsNumber() || ComplexType != valType.(Number).GetNumberType() {
+		panic("Incompatible type : " + valType.GetName())
+	}
+	return fmt.Sprintf("%f", val)
 }
