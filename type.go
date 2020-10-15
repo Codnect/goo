@@ -17,6 +17,8 @@ type Type interface {
 	IsStruct() bool
 	IsInterface() bool
 	IsString() bool
+	IsMap() bool
+	IsPointer() bool
 	String() string
 	Equals(anotherType Type) bool
 }
@@ -29,9 +31,10 @@ type baseType struct {
 	val             reflect.Value
 	kind            reflect.Kind
 	isNumber        bool
+	isPointer       bool
 }
 
-func newBaseType(typ reflect.Type, val reflect.Value) baseType {
+func newBaseType(typ reflect.Type, val reflect.Value, isPointer bool) baseType {
 	return baseType{
 		getTypeName(typ, val),
 		getPackageName(typ, val),
@@ -40,6 +43,7 @@ func newBaseType(typ reflect.Type, val reflect.Value) baseType {
 		val,
 		typ.Kind(),
 		isNumber(typ),
+		isPointer,
 	}
 }
 
@@ -67,12 +71,12 @@ func (typ baseType) GetGoValue() reflect.Value {
 	return typ.val
 }
 
-func (typ baseType) IsNumber() bool {
-	return typ.isNumber
-}
-
 func (typ baseType) IsBoolean() bool {
 	return reflect.Bool == typ.kind
+}
+
+func (typ baseType) IsNumber() bool {
+	return typ.isNumber
 }
 
 func (typ baseType) IsFunction() bool {
@@ -91,6 +95,14 @@ func (typ baseType) IsString() bool {
 	return reflect.String == typ.kind
 }
 
+func (typ baseType) IsMap() bool {
+	return reflect.Map == typ.kind
+}
+
+func (typ baseType) IsPointer() bool {
+	return typ.isPointer
+}
+
 func (typ baseType) String() string {
 	return typ.name
 }
@@ -103,12 +115,12 @@ func (typ baseType) Equals(anotherType Type) bool {
 }
 
 func GetType(obj interface{}) Type {
-	typ, val := GetGoTypeAndValue(obj)
+	typ, val, isPointer := GetGoTypeAndValue(obj)
 	typeFromCache := getTypeFromCache(typ)
 	if typeFromCache != nil {
 		return typeFromCache
 	}
-	baseTyp := createBaseType(typ, val)
+	baseTyp := createBaseType(typ, val, isPointer)
 	return putTypeIntoCache(getActualTypeFromBaseType(baseTyp))
 }
 
@@ -116,13 +128,15 @@ func GetTypeFromGoType(typ reflect.Type) Type {
 	if typ == nil {
 		panic("Type cannot be nil")
 	}
+	isPointer := false
 	if typ.Kind() == reflect.Ptr {
 		typ = typ.Elem()
+		isPointer = true
 	}
 	typeFromCache := getTypeFromCache(typ)
 	if typeFromCache != nil {
 		return typeFromCache
 	}
-	baseTyp := newBaseType(typ, reflect.Value{})
+	baseTyp := newBaseType(typ, reflect.Value{}, isPointer)
 	return getActualTypeFromBaseType(baseTyp)
 }

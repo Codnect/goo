@@ -35,12 +35,14 @@ func getActualTypeFromBaseType(baseTyp baseType) Type {
 		return newStringType(baseTyp)
 	} else if baseTyp.IsBoolean() {
 		return newBooleanType(baseTyp)
+	} else if baseTyp.IsMap() {
+		return newMap(baseTyp)
 	}
 	return baseTyp
 }
 
-func createBaseType(typ reflect.Type, val reflect.Value) baseType {
-	return newBaseType(typ, val)
+func createBaseType(typ reflect.Type, val reflect.Value, isPointer bool) baseType {
+	return newBaseType(typ, val, isPointer)
 }
 
 func getTypeName(typ reflect.Type, val reflect.Value) string {
@@ -59,19 +61,21 @@ func getTypeName(typ reflect.Type, val reflect.Value) string {
 	return typ.Name()
 }
 
-func GetGoTypeAndValue(obj interface{}) (reflect.Type, reflect.Value) {
+func GetGoTypeAndValue(obj interface{}) (reflect.Type, reflect.Value, bool) {
 	typ := reflect.TypeOf(obj)
 	if typ == nil {
 		panic("Type cannot be determined as the given object is nil")
 	}
+	isPointer := false
 	if typ.Kind() == reflect.Ptr {
 		typ = typ.Elem()
+		isPointer = true
 	}
 	val := reflect.ValueOf(obj)
 	if val.Kind() == reflect.Ptr {
 		val = val.Elem()
 	}
-	return typ, val
+	return typ, val, isPointer
 }
 
 func getBaseTypeName(typ reflect.Type) string {

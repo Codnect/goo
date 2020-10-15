@@ -12,11 +12,11 @@ type baseMap struct {
 	valueType Type
 }
 
-func newMap(baseTyp baseType, keyType Type, valueType Type) Map {
+func newMap(baseTyp baseType) Map {
 	return baseMap{
 		baseTyp,
-		keyType,
-		valueType,
+		GetTypeFromGoType(baseTyp.GetGoType().Key()),
+		GetTypeFromGoType(baseTyp.GetGoType().Elem()),
 	}
 }
 
