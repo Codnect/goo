@@ -21,6 +21,7 @@ type Type interface {
 	IsArray() bool
 	IsSlice() bool
 	IsPointer() bool
+	IsInstantiable() bool
 	String() string
 	Equals(anotherType Type) bool
 }
@@ -111,6 +112,13 @@ func (typ baseType) IsSlice() bool {
 
 func (typ baseType) IsPointer() bool {
 	return typ.isPointer
+}
+
+func (typ baseType) IsInstantiable() bool {
+	if typ.IsInterface() || typ.IsFunction() {
+		return false
+	}
+	return true
 }
 
 func (typ baseType) String() string {

@@ -1,7 +1,10 @@
 package goo
 
+import "reflect"
+
 type Boolean interface {
 	Type
+	Instantiable
 	ToBoolean(value string) bool
 	ToString(value bool) string
 }
@@ -31,4 +34,8 @@ func (b booleanType) ToString(value bool) string {
 	} else {
 		return "false"
 	}
+}
+
+func (b booleanType) NewInstance() interface{} {
+	return reflect.New(b.GetGoType()).Elem().Interface()
 }

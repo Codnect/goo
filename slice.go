@@ -1,7 +1,10 @@
 package goo
 
+import "reflect"
+
 type Slice interface {
 	Type
+	Instantiable
 	GetElementType() Type
 }
 
@@ -19,4 +22,8 @@ func newSliceType(baseTyp baseType) Slice {
 
 func (slice sliceType) GetElementType() Type {
 	return slice.elementType
+}
+
+func (slice sliceType) NewInstance() interface{} {
+	return reflect.SliceOf(slice.GetGoType()).Elem()
 }

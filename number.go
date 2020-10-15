@@ -26,6 +26,7 @@ const (
 
 type Number interface {
 	Type
+	Instantiable
 	GetNumberType() NumberType
 	GetBitSize() BitSize
 	Overflow(val interface{}) bool
@@ -81,6 +82,13 @@ func (integer signedIntegerType) Overflow(val interface{}) bool {
 	return integer.GetGoValue().OverflowInt(integerValue)
 }
 
+func (integer signedIntegerType) NewInstance() interface{} {
+	if integer.isPointer {
+		return reflect.New(integer.GetGoType()).Interface()
+	}
+	return reflect.New(integer.GetGoType()).Elem().Interface()
+}
+
 type unsignedIntegerType struct {
 	baseType
 }
@@ -126,6 +134,13 @@ func (integer unsignedIntegerType) Overflow(val interface{}) bool {
 	return integer.GetGoValue().OverflowUint(integerValue)
 }
 
+func (integer unsignedIntegerType) NewInstance() interface{} {
+	if integer.isPointer {
+		return reflect.New(integer.GetGoType()).Interface()
+	}
+	return reflect.New(integer.GetGoType()).Elem().Interface()
+}
+
 type Float interface {
 	Number
 }
@@ -167,6 +182,13 @@ func (float floatType) Overflow(val interface{}) bool {
 	return float.GetGoValue().OverflowFloat(floatValue)
 }
 
+func (float floatType) NewInstance() interface{} {
+	if float.isPointer {
+		return reflect.New(float.GetGoType()).Interface()
+	}
+	return reflect.New(float.GetGoType()).Elem().Interface()
+}
+
 type Complex interface {
 	Number
 }
@@ -197,4 +219,11 @@ func (complex complexType) GetBitSize() BitSize {
 
 func (complex complexType) Overflow(val interface{}) bool {
 	panic("It does not support Overflow for now")
+}
+
+func (complex complexType) NewInstance() interface{} {
+	if complex.isPointer {
+		return reflect.New(complex.GetGoType()).Interface()
+	}
+	return reflect.New(complex.GetGoType()).Elem().Interface()
 }

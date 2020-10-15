@@ -1,7 +1,10 @@
 package goo
 
+import "reflect"
+
 type Struct interface {
 	Type
+	Instantiable
 	GetFields() []Field
 	GetFieldCount() int
 	GetMethods() []Method
@@ -97,4 +100,11 @@ func (typ structType) GetEmbeddedStructCount() int {
 
 func (typ structType) Implements(i Interface) bool {
 	return typ.GetGoType().Implements(i.GetGoType())
+}
+
+func (typ structType) NewInstance() interface{} {
+	if typ.isPointer {
+		return reflect.New(typ.GetGoType()).Interface()
+	}
+	return reflect.New(typ.GetGoType()).Elem().Interface()
 }

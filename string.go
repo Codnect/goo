@@ -10,6 +10,7 @@ import (
 
 type String interface {
 	Type
+	Instantiable
 	ToNumber(val string, number Number) (interface{}, error)
 	ToInt(val string) int
 	ToInt8(val string) int8
@@ -279,4 +280,8 @@ func (str stringType) getFloatValueByBitSize(strValue string, bitSize BitSize) (
 	}
 	// todo
 	return value, nil
+}
+
+func (str stringType) NewInstance() interface{} {
+	return reflect.New(str.GetGoType()).Elem().Interface()
 }
