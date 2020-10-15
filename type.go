@@ -18,6 +18,8 @@ type Type interface {
 	IsInterface() bool
 	IsString() bool
 	IsMap() bool
+	IsArray() bool
+	IsSlice() bool
 	IsPointer() bool
 	String() string
 	Equals(anotherType Type) bool
@@ -97,6 +99,14 @@ func (typ baseType) IsString() bool {
 
 func (typ baseType) IsMap() bool {
 	return reflect.Map == typ.kind
+}
+
+func (typ baseType) IsArray() bool {
+	return reflect.Array == typ.kind
+}
+
+func (typ baseType) IsSlice() bool {
+	return reflect.Slice == typ.kind
 }
 
 func (typ baseType) IsPointer() bool {

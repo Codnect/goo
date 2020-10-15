@@ -23,20 +23,24 @@ func getActualTypeFromBaseType(baseTyp baseType) Type {
 		return newStructType(baseTyp)
 	} else if baseTyp.IsNumber() {
 		if isSignedInteger(baseTyp.typ) {
-			return newSignedInteger(baseTyp)
+			return newSignedIntegerType(baseTyp)
 		} else if isUnsignedInteger(baseTyp.typ) {
-			return newUnsignedInteger(baseTyp)
+			return newUnsignedIntegerType(baseTyp)
 		} else if isFloat(baseTyp.typ) {
-			return newFloat(baseTyp)
+			return newFloatType(baseTyp)
 		} else if isComplex(baseTyp.typ) {
-			return newFloat(baseTyp)
+			return newComplexType(baseTyp)
 		}
 	} else if baseTyp.IsString() {
 		return newStringType(baseTyp)
 	} else if baseTyp.IsBoolean() {
 		return newBooleanType(baseTyp)
 	} else if baseTyp.IsMap() {
-		return newMap(baseTyp)
+		return newMapType(baseTyp)
+	} else if baseTyp.IsArray() {
+		return newArrayType(baseTyp)
+	} else if baseTyp.IsSlice() {
+		return newSliceType(baseTyp)
 	}
 	return baseTyp
 }

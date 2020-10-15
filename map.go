@@ -6,24 +6,24 @@ type Map interface {
 	GetValueType() Type
 }
 
-type baseMap struct {
+type mapType struct {
 	baseType
 	keyType   Type
 	valueType Type
 }
 
-func newMap(baseTyp baseType) Map {
-	return baseMap{
+func newMapType(baseTyp baseType) Map {
+	return mapType{
 		baseTyp,
 		GetTypeFromGoType(baseTyp.GetGoType().Key()),
 		GetTypeFromGoType(baseTyp.GetGoType().Elem()),
 	}
 }
 
-func (m baseMap) GetKeyType() Type {
+func (m mapType) GetKeyType() Type {
 	return m.keyType
 }
 
-func (m baseMap) GetValueType() Type {
+func (m mapType) GetValueType() Type {
 	return m.valueType
 }

@@ -36,21 +36,21 @@ type Integer interface {
 	IsSigned() bool
 }
 
-type signedInteger struct {
+type signedIntegerType struct {
 	baseType
 }
 
-func newSignedInteger(baseTyp baseType) signedInteger {
-	return signedInteger{
+func newSignedIntegerType(baseTyp baseType) signedIntegerType {
+	return signedIntegerType{
 		baseTyp,
 	}
 }
 
-func (integer signedInteger) GetNumberType() NumberType {
+func (integer signedIntegerType) GetNumberType() NumberType {
 	return IntegerType
 }
 
-func (integer signedInteger) GetBitSize() BitSize {
+func (integer signedIntegerType) GetBitSize() BitSize {
 	switch integer.kind {
 	case reflect.Int:
 		return BitSize32
@@ -64,11 +64,11 @@ func (integer signedInteger) GetBitSize() BitSize {
 	panic("this is not a signed integer type")
 }
 
-func (integer signedInteger) IsSigned() bool {
+func (integer signedIntegerType) IsSigned() bool {
 	return true
 }
 
-func (integer signedInteger) Overflow(val interface{}) bool {
+func (integer signedIntegerType) Overflow(val interface{}) bool {
 	valType := GetType(val)
 	if !valType.IsNumber() || IntegerType != valType.(Number).GetNumberType() || !valType.(Integer).IsSigned() {
 		panic("Given type is not compatible with signed integer")
@@ -81,21 +81,21 @@ func (integer signedInteger) Overflow(val interface{}) bool {
 	return integer.GetGoValue().OverflowInt(integerValue)
 }
 
-type unsignedInteger struct {
+type unsignedIntegerType struct {
 	baseType
 }
 
-func newUnsignedInteger(baseTyp baseType) unsignedInteger {
-	return unsignedInteger{
+func newUnsignedIntegerType(baseTyp baseType) unsignedIntegerType {
+	return unsignedIntegerType{
 		baseTyp,
 	}
 }
 
-func (integer unsignedInteger) GetNumberType() NumberType {
+func (integer unsignedIntegerType) GetNumberType() NumberType {
 	return IntegerType
 }
 
-func (integer unsignedInteger) GetBitSize() BitSize {
+func (integer unsignedIntegerType) GetBitSize() BitSize {
 	switch integer.kind {
 	case reflect.Uint:
 		return BitSize32
@@ -109,11 +109,11 @@ func (integer unsignedInteger) GetBitSize() BitSize {
 	panic("this is not a unsigned integer type")
 }
 
-func (integer unsignedInteger) IsSigned() bool {
+func (integer unsignedIntegerType) IsSigned() bool {
 	return false
 }
 
-func (integer unsignedInteger) Overflow(val interface{}) bool {
+func (integer unsignedIntegerType) Overflow(val interface{}) bool {
 	valType := GetType(val)
 	if !valType.IsNumber() || IntegerType != valType.(Number).GetNumberType() || valType.(Integer).IsSigned() {
 		panic("Given type is not compatible with unsigned integer")
@@ -130,21 +130,21 @@ type Float interface {
 	Number
 }
 
-type baseFloat struct {
+type floatType struct {
 	baseType
 }
 
-func newFloat(baseTyp baseType) Float {
-	return baseFloat{
+func newFloatType(baseTyp baseType) Float {
+	return floatType{
 		baseTyp,
 	}
 }
 
-func (float baseFloat) GetNumberType() NumberType {
+func (float floatType) GetNumberType() NumberType {
 	return FloatType
 }
 
-func (float baseFloat) GetBitSize() BitSize {
+func (float floatType) GetBitSize() BitSize {
 	switch float.kind {
 	case reflect.Float32:
 		return BitSize32
@@ -154,7 +154,7 @@ func (float baseFloat) GetBitSize() BitSize {
 	panic("this is not a float type")
 }
 
-func (float baseFloat) Overflow(val interface{}) bool {
+func (float floatType) Overflow(val interface{}) bool {
 	valType := GetType(val)
 	if !valType.IsNumber() || FloatType != valType.(Number).GetNumberType() {
 		panic("Given type is not compatible with float")
@@ -171,21 +171,21 @@ type Complex interface {
 	Number
 }
 
-type baseComplex struct {
+type complexType struct {
 	baseType
 }
 
-func newComplex(baseTyp baseType) Complex {
-	return baseComplex{
+func newComplexType(baseTyp baseType) Complex {
+	return complexType{
 		baseTyp,
 	}
 }
 
-func (complex baseComplex) GetNumberType() NumberType {
+func (complex complexType) GetNumberType() NumberType {
 	return ComplexType
 }
 
-func (complex baseComplex) GetBitSize() BitSize {
+func (complex complexType) GetBitSize() BitSize {
 	switch complex.kind {
 	case reflect.Complex64:
 		return BitSize64
@@ -195,6 +195,6 @@ func (complex baseComplex) GetBitSize() BitSize {
 	panic("this is not a complex type")
 }
 
-func (complex baseComplex) Overflow(val interface{}) bool {
+func (complex complexType) Overflow(val interface{}) bool {
 	panic("It does not support Overflow for now")
 }
