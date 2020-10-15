@@ -18,6 +18,7 @@ type Struct interface {
 	GetEmbeddedStructs() []Struct
 	GetEmbeddedStructCount() int
 	Implements(i Interface) bool
+	Embedded(candidate Struct) bool
 }
 
 type structType struct {
@@ -107,4 +108,22 @@ func (typ structType) NewInstance() interface{} {
 		return reflect.New(typ.GetGoType()).Interface()
 	}
 	return reflect.New(typ.GetGoType()).Elem().Interface()
+}
+
+func (typ structType) Embedded(candidate Struct) bool {
+	if candidate == nil {
+		panic("candidate must not be null")
+	}
+	fields := typ.GetFields()
+	for _, field := range fields {
+		if field.IsAnonymous() && field.GetType().IsStruct() {
+			if field.GetType().Equals(candidate) {
+				return true
+			}
+			if field.(Struct).GetFieldCount() > 0 {
+				return typ.Embedded(field.(Struct))
+			}
+		}
+	}
+	return false
 }
