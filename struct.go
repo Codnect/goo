@@ -96,5 +96,5 @@ func (typ StructType) GetEmbeddedStructCount() int {
 }
 
 func (typ StructType) Implements(i Interface) bool {
-	return false
+	return typ.GetGoType().Implements(i.GetGoType())
 }

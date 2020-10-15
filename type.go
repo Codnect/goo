@@ -17,6 +17,7 @@ type Type interface {
 	IsInterface() bool
 	IsString() bool
 	String() string
+	Equals(anotherType Type) bool
 }
 
 type baseType struct {
@@ -87,6 +88,13 @@ func (typ baseType) IsString() bool {
 
 func (typ baseType) String() string {
 	return typ.name
+}
+
+func (typ baseType) Equals(anotherType Type) bool {
+	if anotherType == nil {
+		return false
+	}
+	return typ.typ == anotherType.GetGoType()
 }
 
 func GetType(obj interface{}) Type {
