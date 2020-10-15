@@ -25,17 +25,17 @@ type String interface {
 	ToFloat64(val string) float64
 }
 
-type StringType struct {
+type stringType struct {
 	baseType
 }
 
-func newStringType(baseTyp baseType) StringType {
-	return StringType{
+func newStringType(baseTyp baseType) stringType {
+	return stringType{
 		baseTyp,
 	}
 }
 
-func (str StringType) ToNumber(val string, number Number) (interface{}, error) {
+func (str stringType) ToNumber(val string, number Number) (interface{}, error) {
 	if number == nil {
 		panic("Number must not be null")
 	}
@@ -50,7 +50,7 @@ func (str StringType) ToNumber(val string, number Number) (interface{}, error) {
 	panic("number type is not valid")
 }
 
-func (str StringType) ToInt(val string) int {
+func (str stringType) ToInt(val string) int {
 	sizeInBits := bits.UintSize
 	var result interface{}
 	var err error
@@ -65,7 +65,7 @@ func (str StringType) ToInt(val string) int {
 	return result.(int)
 }
 
-func (str StringType) ToInt8(val string) int8 {
+func (str stringType) ToInt8(val string) int8 {
 	result, err := str.getIntegerValueByBitSize(val, BitSize8, true)
 	if err != nil {
 		panic(err)
@@ -73,7 +73,7 @@ func (str StringType) ToInt8(val string) int8 {
 	return result.(int8)
 }
 
-func (str StringType) ToInt16(val string) int16 {
+func (str stringType) ToInt16(val string) int16 {
 	result, err := str.getIntegerValueByBitSize(val, BitSize16, true)
 	if err != nil {
 		panic(err)
@@ -81,7 +81,7 @@ func (str StringType) ToInt16(val string) int16 {
 	return result.(int16)
 }
 
-func (str StringType) ToInt32(val string) int32 {
+func (str stringType) ToInt32(val string) int32 {
 	result, err := str.getIntegerValueByBitSize(val, BitSize32, true)
 	if err != nil {
 		panic(err)
@@ -89,7 +89,7 @@ func (str StringType) ToInt32(val string) int32 {
 	return result.(int32)
 }
 
-func (str StringType) ToInt64(val string) int64 {
+func (str stringType) ToInt64(val string) int64 {
 	result, err := str.getIntegerValueByBitSize(val, BitSize64, true)
 	if err != nil {
 		panic(err)
@@ -97,7 +97,7 @@ func (str StringType) ToInt64(val string) int64 {
 	return result.(int64)
 }
 
-func (str StringType) ToUint(val string) uint {
+func (str stringType) ToUint(val string) uint {
 	sizeInBits := bits.UintSize
 	var result interface{}
 	var err error
@@ -112,7 +112,7 @@ func (str StringType) ToUint(val string) uint {
 	return result.(uint)
 }
 
-func (str StringType) ToUint8(val string) uint8 {
+func (str stringType) ToUint8(val string) uint8 {
 	result, err := str.getIntegerValueByBitSize(val, BitSize8, false)
 	if err != nil {
 		panic(err)
@@ -120,7 +120,7 @@ func (str StringType) ToUint8(val string) uint8 {
 	return result.(uint8)
 }
 
-func (str StringType) ToUint16(val string) uint16 {
+func (str stringType) ToUint16(val string) uint16 {
 	result, err := str.getIntegerValueByBitSize(val, BitSize16, false)
 	if err != nil {
 		panic(err)
@@ -128,7 +128,7 @@ func (str StringType) ToUint16(val string) uint16 {
 	return result.(uint16)
 }
 
-func (str StringType) ToUint32(val string) uint32 {
+func (str stringType) ToUint32(val string) uint32 {
 	result, err := str.getIntegerValueByBitSize(val, BitSize32, false)
 	if err != nil {
 		panic(err)
@@ -136,7 +136,7 @@ func (str StringType) ToUint32(val string) uint32 {
 	return result.(uint32)
 }
 
-func (str StringType) ToUint64(val string) uint64 {
+func (str stringType) ToUint64(val string) uint64 {
 	result, err := str.getIntegerValueByBitSize(val, BitSize64, false)
 	if err != nil {
 		panic(err)
@@ -144,15 +144,15 @@ func (str StringType) ToUint64(val string) uint64 {
 	return result.(uint64)
 }
 
-func (str StringType) ToFloat32(val string) float32 {
+func (str stringType) ToFloat32(val string) float32 {
 	return 0
 }
 
-func (str StringType) ToFloat64(val string) float64 {
+func (str stringType) ToFloat64(val string) float64 {
 	return 0
 }
 
-func (str StringType) getIntegerValue(strValue string, integer Integer) (resultValue interface{}, err error) {
+func (str stringType) getIntegerValue(strValue string, integer Integer) (resultValue interface{}, err error) {
 	var value interface{}
 	var signedValue int64
 	var unsignedValue uint64
@@ -184,7 +184,7 @@ func (str StringType) getIntegerValue(strValue string, integer Integer) (resultV
 	return
 }
 
-func (str StringType) getIntegerValueByBitSize(strValue string, bitSize BitSize, isSigned bool) (resultValue interface{}, err error) {
+func (str stringType) getIntegerValueByBitSize(strValue string, bitSize BitSize, isSigned bool) (resultValue interface{}, err error) {
 	if BitSize128 == bitSize {
 		panic("BitSize does not support 128")
 	}
@@ -240,7 +240,7 @@ func (str StringType) getIntegerValueByBitSize(strValue string, bitSize BitSize,
 	}
 }
 
-func (str StringType) getFloatValue(strValue string, float Float) (resultValue interface{}, err error) {
+func (str stringType) getFloatValue(strValue string, float Float) (resultValue interface{}, err error) {
 	var value float64
 	value, err = strconv.ParseFloat(strValue, 64)
 	if err != nil {
@@ -260,7 +260,7 @@ func (str StringType) getFloatValue(strValue string, float Float) (resultValue i
 	return
 }
 
-func (str StringType) getFloatValueByBitSize(strValue string, bitSize BitSize) (resultValue interface{}, err error) {
+func (str stringType) getFloatValueByBitSize(strValue string, bitSize BitSize) (resultValue interface{}, err error) {
 	var value float64
 	value, err = strconv.ParseFloat(strValue, 64)
 	if err != nil {

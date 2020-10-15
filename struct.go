@@ -17,17 +17,17 @@ type Struct interface {
 	Implements(i Interface) bool
 }
 
-type StructType struct {
+type structType struct {
 	baseType
 }
 
-func newStructType(baseTyp baseType) StructType {
-	return StructType{
+func newStructType(baseTyp baseType) structType {
+	return structType{
 		baseTyp,
 	}
 }
 
-func (typ StructType) GetFields() []Field {
+func (typ structType) GetFields() []Field {
 	fields := getFieldsFromCache(typ.GetFullName())
 	if fields != nil {
 		return fields
@@ -41,11 +41,11 @@ func (typ StructType) GetFields() []Field {
 	return putFieldsIntoCache(typ.GetFullName(), fields)
 }
 
-func (typ StructType) GetFieldCount() int {
+func (typ structType) GetFieldCount() int {
 	return typ.typ.NumField()
 }
 
-func (typ StructType) GetMethods() []Method {
+func (typ structType) GetMethods() []Method {
 	methods := getMethodsFromCache(typ.GetFullName())
 	if methods != nil {
 		return methods
@@ -59,35 +59,35 @@ func (typ StructType) GetMethods() []Method {
 	return putMethodsIntoCache(typ.GetFullName(), methods)
 }
 
-func (typ StructType) GetMethodCount() int {
+func (typ structType) GetMethodCount() int {
 	return typ.typ.NumMethod()
 }
 
-func (typ StructType) GetInterfaces() []Interface {
+func (typ structType) GetInterfaces() []Interface {
 	return nil
 }
 
-func (typ StructType) GetInterfaceCount() int {
+func (typ structType) GetInterfaceCount() int {
 	return 0
 }
 
-func (typ StructType) GetEmbeddeds() []Type {
+func (typ structType) GetEmbeddeds() []Type {
 	return nil
 }
 
-func (typ StructType) GetEmbeddedCount() int {
+func (typ structType) GetEmbeddedCount() int {
 	return 0
 }
 
-func (typ StructType) GetEmbeddedInterfaces() []Interface {
+func (typ structType) GetEmbeddedInterfaces() []Interface {
 	return nil
 }
 
-func (typ StructType) GetEmbeddedInterfaceCount() int {
+func (typ structType) GetEmbeddedInterfaceCount() int {
 	return 0
 }
 
-func (typ StructType) GetEmbeddedStructs() []Struct {
+func (typ structType) GetEmbeddedStructs() []Struct {
 	return nil
 }
 

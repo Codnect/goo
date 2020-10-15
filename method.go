@@ -11,15 +11,15 @@ type Method interface {
 	GetMethodParameterTypes() []Type
 }
 
-type MemberMethod struct {
+type memberMethod struct {
 	typ        reflect.Type
 	name       string
 	isExported bool
 	fun        reflect.Value
 }
 
-func newMemberMethod(methodType reflect.Type, name string, isExported bool, fun reflect.Value) MemberMethod {
-	return MemberMethod{
+func newMemberMethod(methodType reflect.Type, name string, isExported bool, fun reflect.Value) memberMethod {
+	return memberMethod{
 		methodType,
 		name,
 		isExported,
@@ -27,27 +27,27 @@ func newMemberMethod(methodType reflect.Type, name string, isExported bool, fun 
 	}
 }
 
-func (method MemberMethod) GetName() string {
+func (method memberMethod) GetName() string {
 	return method.name
 }
 
-func (method MemberMethod) IsExported() bool {
+func (method memberMethod) IsExported() bool {
 	return method.isExported
 }
 
-func (method MemberMethod) String() string {
+func (method memberMethod) String() string {
 	return method.name
 }
 
-func (method MemberMethod) Invoke(obj interface{}, args ...interface{}) interface{} {
+func (method memberMethod) Invoke(obj interface{}, args ...interface{}) interface{} {
 	return nil
 }
 
-func (method MemberMethod) GetMethodReturnTypeCount() int {
+func (method memberMethod) GetMethodReturnTypeCount() int {
 	return method.typ.NumOut()
 }
 
-func (method MemberMethod) GetMethodReturnTypes() []Type {
+func (method memberMethod) GetMethodReturnTypes() []Type {
 	returnTypes := make([]Type, 0)
 	returnTypeCount := method.GetMethodReturnTypeCount()
 	for returnTypeIndex := 0; returnTypeIndex < returnTypeCount; returnTypeIndex++ {
@@ -57,11 +57,11 @@ func (method MemberMethod) GetMethodReturnTypes() []Type {
 	return returnTypes
 }
 
-func (method MemberMethod) GetMethodParameterCount() int {
+func (method memberMethod) GetMethodParameterCount() int {
 	return method.typ.NumIn()
 }
 
-func (method MemberMethod) GetMethodParameterTypes() []Type {
+func (method memberMethod) GetMethodParameterTypes() []Type {
 	parameterTypes := make([]Type, 0)
 	parameterCount := method.GetMethodParameterCount()
 	for paramIndex := 0; paramIndex < parameterCount; paramIndex++ {

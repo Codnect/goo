@@ -8,17 +8,17 @@ type Function interface {
 	GetFunctionReturnTypeCount() int
 }
 
-type FunctionType struct {
+type functionType struct {
 	baseType
 }
 
-func newFunctionType(baseTyp baseType) FunctionType {
-	return FunctionType{
+func newFunctionType(baseTyp baseType) functionType {
+	return functionType{
 		baseTyp,
 	}
 }
 
-func (fun FunctionType) GetFunctionParameterTypes() []Type {
+func (fun functionType) GetFunctionParameterTypes() []Type {
 	parameterTypes := make([]Type, 0)
 	parameterCount := fun.GetFunctionParameterCount()
 	for paramIndex := 0; paramIndex < parameterCount; paramIndex++ {
@@ -28,11 +28,11 @@ func (fun FunctionType) GetFunctionParameterTypes() []Type {
 	return parameterTypes
 }
 
-func (fun FunctionType) GetFunctionParameterCount() int {
+func (fun functionType) GetFunctionParameterCount() int {
 	return fun.typ.NumIn()
 }
 
-func (fun FunctionType) GetFunctionReturnTypes() []Type {
+func (fun functionType) GetFunctionReturnTypes() []Type {
 	returnTypes := make([]Type, 0)
 	returnTypeCount := fun.GetFunctionParameterCount()
 	for returnTypeIndex := 0; returnTypeIndex < returnTypeCount; returnTypeIndex++ {
@@ -42,6 +42,6 @@ func (fun FunctionType) GetFunctionReturnTypes() []Type {
 	return returnTypes
 }
 
-func (fun FunctionType) GetFunctionReturnTypeCount() int {
+func (fun functionType) GetFunctionReturnTypeCount() int {
 	return fun.typ.NumOut()
 }

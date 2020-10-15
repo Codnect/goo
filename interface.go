@@ -6,17 +6,17 @@ type Interface interface {
 	GetMethodCount() int
 }
 
-type InterfaceType struct {
+type interfaceType struct {
 	baseType
 }
 
-func newInterfaceType(baseTyp baseType) InterfaceType {
-	return InterfaceType{
+func newInterfaceType(baseTyp baseType) interfaceType {
+	return interfaceType{
 		baseTyp,
 	}
 }
 
-func (typ InterfaceType) GetMethods() []Method {
+func (typ interfaceType) GetMethods() []Method {
 	methods := getMethodsFromCache(typ.GetFullName())
 	if methods != nil {
 		return methods
@@ -30,6 +30,6 @@ func (typ InterfaceType) GetMethods() []Method {
 	return putMethodsIntoCache(typ.GetFullName(), methods)
 }
 
-func (typ InterfaceType) GetMethodCount() int {
+func (typ interfaceType) GetMethodCount() int {
 	return typ.typ.NumMethod()
 }

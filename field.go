@@ -14,7 +14,7 @@ type Field interface {
 	GetType() Type
 }
 
-type MemberField struct {
+type memberField struct {
 	name        string
 	typ         Type
 	isAnonymous bool
@@ -22,8 +22,8 @@ type MemberField struct {
 	isExported  bool
 }
 
-func newMemberField(name string, typ Type, isAnonymous bool, tags reflect.StructTag, isExported bool) MemberField {
-	return MemberField{
+func newMemberField(name string, typ Type, isAnonymous bool, tags reflect.StructTag, isExported bool) memberField {
+	return memberField{
 		name,
 		typ,
 		isAnonymous,
@@ -32,19 +32,19 @@ func newMemberField(name string, typ Type, isAnonymous bool, tags reflect.Struct
 	}
 }
 
-func (field MemberField) GetName() string {
+func (field memberField) GetName() string {
 	return field.name
 }
 
-func (field MemberField) IsAnonymous() bool {
+func (field memberField) IsAnonymous() bool {
 	return field.isAnonymous
 }
 
-func (field MemberField) IsExported() bool {
+func (field memberField) IsExported() bool {
 	return field.isExported
 }
 
-func (field MemberField) GetTags() []Tag {
+func (field memberField) GetTags() []Tag {
 	fieldTags := make([]Tag, 0)
 	tags := field.tags
 	for tags != "" {
@@ -91,7 +91,7 @@ func (field MemberField) GetTags() []Tag {
 	return fieldTags
 }
 
-func (field MemberField) GetTagByName(name string) (Tag, error) {
+func (field memberField) GetTagByName(name string) (Tag, error) {
 	value, ok := field.tags.Lookup(name)
 	if ok {
 		tag := Tag{name, value}
@@ -101,10 +101,10 @@ func (field MemberField) GetTagByName(name string) (Tag, error) {
 	return Tag{}, errors.New(errText)
 }
 
-func (field MemberField) GetType() Type {
+func (field memberField) GetType() Type {
 	return field.typ
 }
 
-func (field MemberField) String() string {
+func (field memberField) String() string {
 	return field.name
 }
