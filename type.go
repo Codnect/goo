@@ -11,6 +11,7 @@ type Type interface {
 	GetPackageFullName() string
 	GetGoType() reflect.Type
 	GetGoValue() reflect.Value
+	IsBoolean() bool
 	IsNumber() bool
 	IsFunction() bool
 	IsStruct() bool
@@ -68,6 +69,10 @@ func (typ baseType) GetGoValue() reflect.Value {
 
 func (typ baseType) IsNumber() bool {
 	return typ.isNumber
+}
+
+func (typ baseType) IsBoolean() bool {
+	return reflect.Bool == typ.kind
 }
 
 func (typ baseType) IsFunction() bool {

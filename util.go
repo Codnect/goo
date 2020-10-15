@@ -31,6 +31,10 @@ func getActualTypeFromBaseType(baseTyp baseType) Type {
 		} else if isComplex(baseTyp.typ) {
 			return newFloat(baseTyp)
 		}
+	} else if baseTyp.IsString() {
+		return newStringType(baseTyp)
+	} else if baseTyp.IsBoolean() {
+		return newBooleanType(baseTyp)
 	}
 	return baseTyp
 }
