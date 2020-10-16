@@ -120,8 +120,8 @@ func (typ structType) Embedded(candidate Struct) bool {
 			if field.GetType().Equals(candidate) {
 				return true
 			}
-			if field.(Struct).GetFieldCount() > 0 {
-				return typ.Embedded(field.(Struct))
+			if field.GetType().(Struct).GetFieldCount() > 0 {
+				return typ.Embedded(field.GetType().(Struct))
 			}
 		}
 	}
