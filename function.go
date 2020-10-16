@@ -37,7 +37,7 @@ func (fun functionType) GetFunctionParameterCount() int {
 
 func (fun functionType) GetFunctionReturnTypes() []Type {
 	returnTypes := make([]Type, 0)
-	returnTypeCount := fun.GetFunctionParameterCount()
+	returnTypeCount := fun.GetFunctionReturnTypeCount()
 	for returnTypeIndex := 0; returnTypeIndex < returnTypeCount; returnTypeIndex++ {
 		returnType := fun.typ.Out(returnTypeIndex)
 		returnTypes = append(returnTypes, GetTypeFromGoType(returnType))
