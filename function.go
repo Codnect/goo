@@ -1,11 +1,14 @@
 package goo
 
+import "reflect"
+
 type Function interface {
 	Type
 	GetFunctionParameterTypes() []Type
 	GetFunctionParameterCount() int
 	GetFunctionReturnTypes() []Type
 	GetFunctionReturnTypeCount() int
+	Call(args []interface{}) []interface{}
 }
 
 type functionType struct {
@@ -44,4 +47,17 @@ func (fun functionType) GetFunctionReturnTypes() []Type {
 
 func (fun functionType) GetFunctionReturnTypeCount() int {
 	return fun.typ.NumOut()
+}
+
+func (fun functionType) Call(args []interface{}) []interface{} {
+	inputs := make([]reflect.Value, 0)
+	for _, arg := range args {
+		inputs = append(inputs, reflect.ValueOf(arg))
+	}
+	outputs := make([]interface{}, 0)
+	results := fun.val.Call(inputs)
+	for _, outputParam := range results {
+		outputs = append(outputs, outputParam.Interface())
+	}
+	return outputs
 }
