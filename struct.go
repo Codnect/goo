@@ -118,7 +118,7 @@ func (typ structType) Embedded(candidate Struct) bool {
 }
 
 func (typ structType) embeddedStruct(parent Struct, candidate Struct) bool {
-	fields := typ.GetFields()
+	fields := candidate.GetFields()
 	for _, field := range fields {
 		if field.IsAnonymous() && field.GetType().IsStruct() {
 			if parent.Equals(candidate) {
