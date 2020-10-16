@@ -114,14 +114,18 @@ func (typ structType) Embedded(candidate Struct) bool {
 	if candidate == nil {
 		panic("candidate must not be null")
 	}
+	return typ.embeddedStruct(typ, candidate)
+}
+
+func (typ structType) embeddedStruct(parent Struct, candidate Struct) bool {
 	fields := typ.GetFields()
 	for _, field := range fields {
 		if field.IsAnonymous() && field.GetType().IsStruct() {
-			if field.GetType().Equals(candidate) {
+			if parent.Equals(candidate) {
 				return true
 			}
 			if field.GetType().(Struct).GetFieldCount() > 0 {
-				return typ.Embedded(field.GetType().(Struct))
+				return typ.embeddedStruct(parent, field.GetType().(Struct))
 			}
 		}
 	}
