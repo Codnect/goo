@@ -3,7 +3,7 @@ Goo is a reflection library written in Go, which provides an abstraction for bui
 Thanks to the abstraction which is provided, it make reflection easier. Unlike built-in reflection api, 
 it is easy to use and understand.
 
-If you want to contribute to library and find a bug, please report.
+If you want to contribute to library or find a bug, please report.
 
 # Which projects uses
 * [Procyon Framework](https://www.github.com/procyon-projects) written in Go uses it during development,
