@@ -9,16 +9,8 @@ type Struct interface {
 	GetFieldCount() int
 	GetMethods() []Method
 	GetMethodCount() int
-	GetInterfaces() []Interface
-	GetInterfaceCount() int
-	GetEmbeddeds() []Type
-	GetEmbeddedCount() int
-	GetEmbeddedInterfaces() []Interface
-	GetEmbeddedInterfaceCount() int
-	GetEmbeddedStructs() []Struct
-	GetEmbeddedStructCount() int
 	Implements(i Interface) bool
-	Embedded(candidate Struct) bool
+	EmbeddedStruct(candidate Struct) bool
 }
 
 type structType struct {
@@ -67,38 +59,6 @@ func (typ structType) GetMethodCount() int {
 	return typ.typ.NumMethod()
 }
 
-func (typ structType) GetInterfaces() []Interface {
-	return nil
-}
-
-func (typ structType) GetInterfaceCount() int {
-	return 0
-}
-
-func (typ structType) GetEmbeddeds() []Type {
-	return nil
-}
-
-func (typ structType) GetEmbeddedCount() int {
-	return 0
-}
-
-func (typ structType) GetEmbeddedInterfaces() []Interface {
-	return nil
-}
-
-func (typ structType) GetEmbeddedInterfaceCount() int {
-	return 0
-}
-
-func (typ structType) GetEmbeddedStructs() []Struct {
-	return nil
-}
-
-func (typ structType) GetEmbeddedStructCount() int {
-	return 0
-}
-
 func (typ structType) Implements(i Interface) bool {
 	return typ.GetGoType().Implements(i.GetGoType())
 }
@@ -110,7 +70,7 @@ func (typ structType) NewInstance() interface{} {
 	return reflect.New(typ.GetGoType()).Elem().Interface()
 }
 
-func (typ structType) Embedded(candidate Struct) bool {
+func (typ structType) EmbeddedStruct(candidate Struct) bool {
 	if candidate == nil {
 		panic("candidate must not be null")
 	}
@@ -118,16 +78,29 @@ func (typ structType) Embedded(candidate Struct) bool {
 }
 
 func (typ structType) embeddedStruct(parent Struct, candidate Struct) bool {
-	fields := candidate.GetFields()
+	fields := parent.GetFields()
 	for _, field := range fields {
 		if field.IsAnonymous() && field.GetType().IsStruct() {
-			if parent.Equals(candidate) {
+			if candidate.Equals(field.GetType()) {
 				return true
 			}
 			if field.GetType().(Struct).GetFieldCount() > 0 {
-				return typ.embeddedStruct(parent, field.GetType().(Struct))
+				return typ.embeddedStruct(field.GetType().(Struct), candidate)
 			}
 		}
 	}
 	return false
+}
+
+func (typ structType) visitEmbeddedStruct(parent Struct, embeddeds []Struct) []Struct {
+	fields := parent.GetFields()
+	for _, field := range fields {
+		if field.IsAnonymous() && field.GetType().IsStruct() {
+			embeddeds = append(embeddeds, field.GetType().(Struct))
+			if field.GetType().(Struct).GetFieldCount() > 0 {
+				embeddeds = typ.visitEmbeddedStruct(field.GetType().(Struct), embeddeds)
+			}
+		}
+	}
+	return embeddeds
 }
