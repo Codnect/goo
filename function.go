@@ -51,7 +51,7 @@ func (fun functionType) GetFunctionReturnTypeCount() int {
 
 func (fun functionType) Call(args []interface{}) []interface{} {
 	parameterCount := fun.GetFunctionParameterCount()
-	if (args == nil && parameterCount != 0) || (args != nil && len(args) == parameterCount) {
+	if (args == nil && parameterCount != 0) || (args != nil && len(args) != parameterCount) {
 		panic("Parameter counts don't match argument counts")
 	}
 	inputs := make([]reflect.Value, 0)
