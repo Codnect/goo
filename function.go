@@ -12,10 +12,10 @@ type Function interface {
 }
 
 type functionType struct {
-	baseType
+	*baseType
 }
 
-func newFunctionType(baseTyp baseType) functionType {
+func newFunctionType(baseTyp *baseType) functionType {
 	return functionType{
 		baseTyp,
 	}

@@ -10,12 +10,12 @@ type Array interface {
 }
 
 type arrayType struct {
-	baseType
+	*baseType
 	elementType Type
 	length      int
 }
 
-func newArrayType(baseTyp baseType) Array {
+func newArrayType(baseTyp *baseType) Array {
 	return arrayType{
 		baseTyp,
 		GetTypeFromGoType(baseTyp.GetGoType().Elem()),

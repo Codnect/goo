@@ -10,10 +10,10 @@ type Boolean interface {
 }
 
 type booleanType struct {
-	baseType
+	*baseType
 }
 
-func newBooleanType(baseTyp baseType) Boolean {
+func newBooleanType(baseTyp *baseType) Boolean {
 	return booleanType{
 		baseTyp,
 	}

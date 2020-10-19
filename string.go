@@ -27,10 +27,10 @@ type String interface {
 }
 
 type stringType struct {
-	baseType
+	*baseType
 }
 
-func newStringType(baseTyp baseType) stringType {
+func newStringType(baseTyp *baseType) stringType {
 	return stringType{
 		baseTyp,
 	}

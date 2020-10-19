@@ -9,6 +9,7 @@ type Type interface {
 	GetFullName() string
 	GetPackageName() string
 	GetPackageFullName() string
+	GetGoPointerType() reflect.Type
 	GetGoType() reflect.Type
 	GetGoValue() reflect.Value
 	IsBoolean() bool
@@ -22,31 +23,38 @@ type Type interface {
 	IsSlice() bool
 	IsPointer() bool
 	IsInstantiable() bool
+	ToStruct() Struct
 	String() string
 	Equals(anotherType Type) bool
 }
 
 type baseType struct {
+	parentType      interface{}
 	name            string
 	packageName     string
 	packageFullName string
 	typ             reflect.Type
 	val             reflect.Value
+	ptrType         reflect.Type
+	ptrVal          reflect.Value
 	kind            reflect.Kind
 	isNumber        bool
 	isPointer       bool
 }
 
-func newBaseType(typ reflect.Type, val reflect.Value, isPointer bool) baseType {
-	return baseType{
+func newBaseType(typ reflect.Type, val reflect.Value) *baseType {
+	return &baseType{
+		nil,
 		getTypeName(typ, val),
 		getPackageName(typ, val),
 		getPackageFullName(typ, val),
 		typ,
 		val,
+		nil,
+		reflect.Value{},
 		typ.Kind(),
 		isNumber(typ),
-		isPointer,
+		false,
 	}
 }
 
@@ -64,6 +72,10 @@ func (typ baseType) GetPackageName() string {
 
 func (typ baseType) GetPackageFullName() string {
 	return typ.packageFullName
+}
+
+func (typ baseType) GetGoPointerType() reflect.Type {
+	return typ.ptrType
 }
 
 func (typ baseType) GetGoType() reflect.Type {
@@ -121,6 +133,10 @@ func (typ baseType) IsInstantiable() bool {
 	return true
 }
 
+func (typ baseType) ToStruct() Struct {
+	return typ.parentType.(Struct)
+}
+
 func (typ baseType) String() string {
 	return typ.name
 }
@@ -134,12 +150,24 @@ func (typ baseType) Equals(anotherType Type) bool {
 
 func GetType(obj interface{}) Type {
 	typ, val, isPointer := GetGoTypeAndValue(obj)
-	typeFromCache := getTypeFromCache(typ)
+	typeFromCache := getTypeFromCache(typ, isPointer)
 	if typeFromCache != nil {
 		return typeFromCache
 	}
-	baseTyp := createBaseType(typ, val, isPointer)
-	return putTypeIntoCache(getActualTypeFromBaseType(baseTyp))
+	baseTyp := createBaseType(typ, val)
+	populatePointerInfo(obj, baseTyp, isPointer)
+	actualType := getActualTypeFromBaseType(baseTyp)
+	baseTyp.parentType = actualType
+	return putTypeIntoCache(actualType, isPointer)
+}
+
+func populatePointerInfo(obj interface{}, baseType *baseType, isPointer bool) {
+	if isPointer {
+		typ, val := getGoPointerTypeAndValue(obj)
+		baseType.isPointer = true
+		baseType.ptrType = typ
+		baseType.ptrVal = val
+	}
 }
 
 func GetTypeFromGoType(typ reflect.Type) Type {
@@ -151,10 +179,11 @@ func GetTypeFromGoType(typ reflect.Type) Type {
 		typ = typ.Elem()
 		isPointer = true
 	}
-	typeFromCache := getTypeFromCache(typ)
+	typeFromCache := getTypeFromCache(typ, isPointer)
 	if typeFromCache != nil {
 		return typeFromCache
 	}
-	baseTyp := newBaseType(typ, reflect.Value{}, isPointer)
-	return getActualTypeFromBaseType(baseTyp)
+	baseTyp := newBaseType(typ, reflect.Value{})
+	actualType := getActualTypeFromBaseType(baseTyp)
+	return putTypeIntoCache(actualType, isPointer)
 }

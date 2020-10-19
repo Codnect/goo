@@ -39,10 +39,10 @@ type Integer interface {
 }
 
 type signedIntegerType struct {
-	baseType
+	*baseType
 }
 
-func newSignedIntegerType(baseTyp baseType) signedIntegerType {
+func newSignedIntegerType(baseTyp *baseType) signedIntegerType {
 	return signedIntegerType{
 		baseTyp,
 	}
@@ -99,10 +99,10 @@ func (integer signedIntegerType) ToString(val interface{}) string {
 }
 
 type unsignedIntegerType struct {
-	baseType
+	*baseType
 }
 
-func newUnsignedIntegerType(baseTyp baseType) unsignedIntegerType {
+func newUnsignedIntegerType(baseTyp *baseType) unsignedIntegerType {
 	return unsignedIntegerType{
 		baseTyp,
 	}
@@ -163,10 +163,10 @@ type Float interface {
 }
 
 type floatType struct {
-	baseType
+	*baseType
 }
 
-func newFloatType(baseTyp baseType) Float {
+func newFloatType(baseTyp *baseType) Float {
 	return floatType{
 		baseTyp,
 	}
@@ -219,10 +219,10 @@ type Complex interface {
 }
 
 type complexType struct {
-	baseType
+	*baseType
 }
 
-func newComplexType(baseTyp baseType) Complex {
+func newComplexType(baseTyp *baseType) Complex {
 	return complexType{
 		baseTyp,
 	}

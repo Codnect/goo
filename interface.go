@@ -7,10 +7,10 @@ type Interface interface {
 }
 
 type interfaceType struct {
-	baseType
+	*baseType
 }
 
-func newInterfaceType(baseTyp baseType) interfaceType {
+func newInterfaceType(baseTyp *baseType) interfaceType {
 	return interfaceType{
 		baseTyp,
 	}

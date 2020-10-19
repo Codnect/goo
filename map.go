@@ -10,12 +10,12 @@ type Map interface {
 }
 
 type mapType struct {
-	baseType
+	*baseType
 	keyType   Type
 	valueType Type
 }
 
-func newMapType(baseTyp baseType) Map {
+func newMapType(baseTyp *baseType) Map {
 	return mapType{
 		baseTyp,
 		GetTypeFromGoType(baseTyp.GetGoType().Key()),

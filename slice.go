@@ -9,11 +9,11 @@ type Slice interface {
 }
 
 type sliceType struct {
-	baseType
+	*baseType
 	elementType Type
 }
 
-func newSliceType(baseTyp baseType) Slice {
+func newSliceType(baseTyp *baseType) Slice {
 	return sliceType{
 		baseTyp,
 		GetTypeFromGoType(baseTyp.GetGoType().Elem()),

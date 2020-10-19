@@ -14,7 +14,7 @@ func sanitizedName(str string) string {
 	return name
 }
 
-func getActualTypeFromBaseType(baseTyp baseType) Type {
+func getActualTypeFromBaseType(baseTyp *baseType) Type {
 	if baseTyp.IsFunction() {
 		return newFunctionType(baseTyp)
 	} else if baseTyp.IsInterface() {
@@ -47,8 +47,8 @@ func getActualTypeFromBaseType(baseTyp baseType) Type {
 	return baseTyp
 }
 
-func createBaseType(typ reflect.Type, val reflect.Value, isPointer bool) baseType {
-	return newBaseType(typ, val, isPointer)
+func createBaseType(typ reflect.Type, val reflect.Value) *baseType {
+	return newBaseType(typ, val)
 }
 
 func getTypeName(typ reflect.Type, val reflect.Value) string {
@@ -82,6 +82,23 @@ func GetGoTypeAndValue(obj interface{}) (reflect.Type, reflect.Value, bool) {
 		val = val.Elem()
 	}
 	return typ, val, isPointer
+}
+
+func getGoPointerTypeAndValue(obj interface{}) (reflect.Type, reflect.Value) {
+	var pointerType reflect.Type
+	var pointerVal reflect.Value
+	typ := reflect.TypeOf(obj)
+	if typ == nil {
+		panic("Type cannot be determined as the given object is nil")
+	}
+	if typ.Kind() == reflect.Ptr {
+		pointerType = typ
+	}
+	val := reflect.ValueOf(obj)
+	if val.Kind() == reflect.Ptr {
+		pointerVal = val.Elem()
+	}
+	return pointerType, pointerVal
 }
 
 func getBaseTypeName(typ reflect.Type) string {

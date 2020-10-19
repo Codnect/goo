@@ -20,7 +20,7 @@ func initCache() {
 	cacheFieldMap = make(map[string][]Field, 0)
 }
 
-func getTypeFromCache(typ reflect.Type) Type {
+func getTypeFromCache(typ reflect.Type, isPointer bool) Type {
 	if reflect.Interface != typ.Kind() && reflect.Struct != typ.Kind() {
 		return nil
 	}
@@ -28,14 +28,20 @@ func getTypeFromCache(typ reflect.Type) Type {
 	defer func() {
 		cacheTypeMu.Unlock()
 	}()
+	var cacheKeyName string
+	if isPointer {
+		cacheKeyName = "$" + typeName
+	} else {
+		cacheKeyName = typeName
+	}
 	cacheTypeMu.Lock()
-	if typ, ok := cacheTypeMap[typeName]; ok {
+	if typ, ok := cacheTypeMap[cacheKeyName]; ok {
 		return typ
 	}
 	return nil
 }
 
-func putTypeIntoCache(typ Type) Type {
+func putTypeIntoCache(typ Type, isPointer bool) Type {
 	if !typ.IsInterface() && !typ.IsStruct() {
 		return typ
 	}
@@ -43,7 +49,13 @@ func putTypeIntoCache(typ Type) Type {
 		cacheTypeMu.Unlock()
 	}()
 	cacheTypeMu.Lock()
-	cacheTypeMap[typ.GetFullName()] = typ
+	var cacheKeyName string
+	if isPointer {
+		cacheKeyName = "$" + typ.GetFullName()
+	} else {
+		cacheKeyName = typ.GetFullName()
+	}
+	cacheTypeMap[cacheKeyName] = typ
 	return typ
 }
 
