@@ -4,14 +4,7 @@ import (
 	"reflect"
 )
 
-type Type interface {
-	GetName() string
-	GetFullName() string
-	GetPackageName() string
-	GetPackageFullName() string
-	GetGoPointerType() reflect.Type
-	GetGoType() reflect.Type
-	GetGoValue() reflect.Value
+type TypeConverter interface {
 	IsBoolean() bool
 	IsNumber() bool
 	IsFunction() bool
@@ -21,9 +14,28 @@ type Type interface {
 	IsMap() bool
 	IsArray() bool
 	IsSlice() bool
+	ToBooleanType() Boolean
+	ToNumberType() Number
+	ToFunctionType() Function
+	ToStructType() Struct
+	ToInterfaceType() Interface
+	ToStringType() String
+	ToMapType() Map
+	ToArrayType() Array
+	ToSliceType() Slice
+}
+
+type Type interface {
+	TypeConverter
+	GetName() string
+	GetFullName() string
+	GetPackageName() string
+	GetPackageFullName() string
+	GetGoPointerType() reflect.Type
+	GetGoType() reflect.Type
+	GetGoValue() reflect.Value
 	IsPointer() bool
 	IsInstantiable() bool
-	ToStruct() Struct
 	String() string
 	Equals(anotherType Type) bool
 }
@@ -133,7 +145,39 @@ func (typ baseType) IsInstantiable() bool {
 	return true
 }
 
-func (typ baseType) ToStruct() Struct {
+func (typ baseType) ToBooleanType() Boolean {
+	return typ.parentType.(Boolean)
+}
+
+func (typ baseType) ToNumberType() Number {
+	return typ.parentType.(Number)
+}
+
+func (typ baseType) ToFunctionType() Function {
+	return typ.parentType.(Function)
+}
+
+func (typ baseType) ToInterfaceType() Interface {
+	return typ.parentType.(Interface)
+}
+
+func (typ baseType) ToStringType() String {
+	return typ.parentType.(String)
+}
+
+func (typ baseType) ToMapType() Map {
+	return typ.parentType.(Map)
+}
+
+func (typ baseType) ToArrayType() Array {
+	return typ.parentType.(Array)
+}
+
+func (typ baseType) ToSliceType() Slice {
+	return typ.parentType.(Slice)
+}
+
+func (typ baseType) ToStructType() Struct {
 	return typ.parentType.(Struct)
 }
 

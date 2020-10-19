@@ -108,7 +108,7 @@ func testGetNamesForStruct(t *testing.T, typ Type) {
 	assert.Equal(t, "github.com.codnect.goo.Animal", typ.GetFullName())
 	assert.Equal(t, "goo", typ.GetPackageName())
 	assert.Equal(t, "github.com.codnect.goo", typ.GetPackageFullName())
-	assert.Equal(t, typ.(Struct), typ.ToStruct())
+	assert.Equal(t, typ.(Struct), typ.ToStructType())
 }
 
 func TestGetFieldsForStruct(t *testing.T) {
