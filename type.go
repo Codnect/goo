@@ -229,5 +229,6 @@ func GetTypeFromGoType(typ reflect.Type) Type {
 	}
 	baseTyp := newBaseType(typ, reflect.Value{})
 	actualType := getActualTypeFromBaseType(baseTyp)
+	baseTyp.parentType = actualType
 	return putTypeIntoCache(actualType, isPointer)
 }
