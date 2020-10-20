@@ -224,7 +224,9 @@ func GetTypeFromGoType(typ reflect.Type) Type {
 		panic("Type cannot be nil")
 	}
 	isPointer := false
+	var ptrType reflect.Type
 	if typ.Kind() == reflect.Ptr {
+		ptrType = typ
 		typ = typ.Elem()
 		isPointer = true
 	}
@@ -235,5 +237,9 @@ func GetTypeFromGoType(typ reflect.Type) Type {
 	baseTyp := newBaseType(typ, reflect.Value{})
 	actualType := getActualTypeFromBaseType(baseTyp)
 	baseTyp.parentType = actualType
+	if isPointer {
+		baseTyp.ptrType = ptrType
+		baseTyp.isPointer = true
+	}
 	return putTypeIntoCache(actualType, isPointer)
 }
