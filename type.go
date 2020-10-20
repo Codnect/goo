@@ -32,6 +32,7 @@ type Type interface {
 	GetPackageName() string
 	GetPackageFullName() string
 	GetGoPointerType() reflect.Type
+	GetGoPointerValue() reflect.Value
 	GetGoType() reflect.Type
 	GetGoValue() reflect.Value
 	IsPointer() bool
@@ -88,6 +89,10 @@ func (typ baseType) GetPackageFullName() string {
 
 func (typ baseType) GetGoPointerType() reflect.Type {
 	return typ.ptrType
+}
+
+func (typ baseType) GetGoPointerValue() reflect.Value {
+	return typ.ptrVal
 }
 
 func (typ baseType) GetGoType() reflect.Type {

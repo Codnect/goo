@@ -40,7 +40,7 @@ func (str stringType) ToNumber(val string, number Number) (interface{}, error) {
 	if number == nil {
 		panic("Number must not be null")
 	}
-	numberType := number.GetNumberType()
+	numberType := number.GetType()
 	if IntegerType == numberType {
 		return str.getIntegerValue(val, number.(Integer))
 	} else if FloatType == numberType {

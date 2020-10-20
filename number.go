@@ -27,7 +27,7 @@ const (
 type Number interface {
 	Type
 	Instantiable
-	GetNumberType() NumberType
+	GetType() NumberType
 	GetBitSize() BitSize
 	Overflow(val interface{}) bool
 	ToString(val interface{}) string
@@ -48,7 +48,7 @@ func newSignedIntegerType(baseTyp *baseType) signedIntegerType {
 	}
 }
 
-func (integer signedIntegerType) GetNumberType() NumberType {
+func (integer signedIntegerType) GetType() NumberType {
 	return IntegerType
 }
 
@@ -72,7 +72,7 @@ func (integer signedIntegerType) IsSigned() bool {
 
 func (integer signedIntegerType) Overflow(val interface{}) bool {
 	valType := GetType(val)
-	if !valType.IsNumber() || IntegerType != valType.(Number).GetNumberType() || !valType.(Integer).IsSigned() {
+	if !valType.IsNumber() || IntegerType != valType.(Number).GetType() || !valType.(Integer).IsSigned() {
 		panic("Given type is not compatible with signed integer")
 	}
 	integerValueStr := fmt.Sprintf("%d", val)
@@ -92,7 +92,7 @@ func (integer signedIntegerType) NewInstance() interface{} {
 
 func (integer signedIntegerType) ToString(val interface{}) string {
 	valType := GetType(val)
-	if !valType.IsNumber() || IntegerType != valType.(Number).GetNumberType() || !valType.(Integer).IsSigned() {
+	if !valType.IsNumber() || IntegerType != valType.(Number).GetType() || !valType.(Integer).IsSigned() {
 		panic("Incompatible type : " + valType.GetName())
 	}
 	return fmt.Sprintf("%d", val)
@@ -132,7 +132,7 @@ func (integer unsignedIntegerType) IsSigned() bool {
 
 func (integer unsignedIntegerType) Overflow(val interface{}) bool {
 	valType := GetType(val)
-	if !valType.IsNumber() || IntegerType != valType.(Number).GetNumberType() || valType.(Integer).IsSigned() {
+	if !valType.IsNumber() || IntegerType != valType.(Number).GetType() || valType.(Integer).IsSigned() {
 		panic("Given type is not compatible with unsigned integer")
 	}
 	integerValueStr := fmt.Sprintf("%d", val)
@@ -152,7 +152,7 @@ func (integer unsignedIntegerType) NewInstance() interface{} {
 
 func (integer unsignedIntegerType) ToString(val interface{}) string {
 	valType := GetType(val)
-	if !valType.IsNumber() || IntegerType != valType.(Number).GetNumberType() || valType.(Integer).IsSigned() {
+	if !valType.IsNumber() || IntegerType != valType.(Number).GetType() || valType.(Integer).IsSigned() {
 		panic("Incompatible type : " + valType.GetName())
 	}
 	return fmt.Sprintf("%d", val)
@@ -172,7 +172,7 @@ func newFloatType(baseTyp *baseType) Float {
 	}
 }
 
-func (float floatType) GetNumberType() NumberType {
+func (float floatType) GetType() NumberType {
 	return FloatType
 }
 
@@ -188,7 +188,7 @@ func (float floatType) GetBitSize() BitSize {
 
 func (float floatType) Overflow(val interface{}) bool {
 	valType := GetType(val)
-	if !valType.IsNumber() || FloatType != valType.(Number).GetNumberType() {
+	if !valType.IsNumber() || FloatType != valType.(Number).GetType() {
 		panic("Given type is not compatible with float")
 	}
 	floatValueStr := fmt.Sprintf("%f", val)
@@ -208,7 +208,7 @@ func (float floatType) NewInstance() interface{} {
 
 func (float floatType) ToString(val interface{}) string {
 	valType := GetType(val)
-	if !valType.IsNumber() || FloatType != valType.(Number).GetNumberType() {
+	if !valType.IsNumber() || FloatType != valType.(Number).GetType() {
 		panic("Incompatible type : " + valType.GetName())
 	}
 	return fmt.Sprintf("%f", val)
@@ -228,7 +228,7 @@ func newComplexType(baseTyp *baseType) Complex {
 	}
 }
 
-func (complex complexType) GetNumberType() NumberType {
+func (complex complexType) GetType() NumberType {
 	return ComplexType
 }
 
@@ -255,7 +255,7 @@ func (complex complexType) NewInstance() interface{} {
 
 func (complex complexType) ToString(val interface{}) string {
 	valType := GetType(val)
-	if !valType.IsNumber() || ComplexType != valType.(Number).GetNumberType() {
+	if !valType.IsNumber() || ComplexType != valType.(Number).GetType() {
 		panic("Incompatible type : " + valType.GetName())
 	}
 	return fmt.Sprintf("%f", val)

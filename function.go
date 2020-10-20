@@ -58,7 +58,11 @@ func (fun functionType) Call(args []interface{}) []interface{} {
 	for index, arg := range args {
 		if arg == nil {
 			paramType := fun.GetFunctionParameterTypes()[index]
-			inputs = append(inputs, reflect.New(paramType.GetGoType()).Elem())
+			if paramType.IsPointer() {
+				inputs = append(inputs, reflect.New(paramType.GetGoPointerType()).Elem())
+			} else {
+				inputs = append(inputs, reflect.New(paramType.GetGoType()).Elem())
+			}
 		} else {
 			inputs = append(inputs, reflect.ValueOf(arg))
 		}
