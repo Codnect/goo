@@ -12,6 +12,8 @@ type Field interface {
 	Taggable
 	IsAnonymous() bool
 	GetType() Type
+	CanSet() bool
+	SetValue(instance interface{}, value interface{})
 }
 
 type memberField struct {
@@ -41,6 +43,10 @@ func (field memberField) IsAnonymous() bool {
 }
 
 func (field memberField) IsExported() bool {
+	return field.isExported
+}
+
+func (field memberField) CanSet() bool {
 	return field.isExported
 }
 
@@ -107,4 +113,28 @@ func (field memberField) GetType() Type {
 
 func (field memberField) String() string {
 	return field.name
+}
+
+func (field memberField) SetValue(instance interface{}, value interface{}) {
+	if !field.CanSet() {
+		panic("Field cannot be set because of it is an unexported field")
+	}
+	typ := GetType(instance)
+	if !typ.IsStruct() {
+		panic("Instance must only be a struct")
+	}
+	if !typ.IsPointer() {
+		panic("Instance type must be a pointer")
+	}
+	structType := typ.ToStructType().GetGoType()
+	structValueType := typ.ToStructType().GetGoPointerValue()
+	structFieldCount := structType.NumMethod()
+	for fieldIndex := 0; fieldIndex < structFieldCount; fieldIndex++ {
+		fieldType := structType.Field(fieldIndex)
+		fieldValue := structValueType.Field(fieldIndex)
+		if fieldType.Name == field.name {
+			fieldValue.Set(reflect.ValueOf(value))
+			break
+		}
+	}
 }

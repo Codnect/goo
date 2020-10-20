@@ -51,7 +51,7 @@ func (typ structType) GetExportedFields() []Field {
 	exportedFields := make([]Field, 0)
 	fields := typ.GetFields()
 	for _, field := range fields {
-		if !field.IsExported() {
+		if field.IsExported() {
 			exportedFields = append(exportedFields, field)
 		}
 	}
@@ -62,7 +62,7 @@ func (typ structType) GetExportedFieldCount() int {
 	exportedFieldsCount := 0
 	fields := typ.GetFields()
 	for _, field := range fields {
-		if !field.IsExported() {
+		if field.IsExported() {
 			exportedFieldsCount++
 		}
 	}
