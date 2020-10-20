@@ -128,7 +128,7 @@ func (field memberField) SetValue(instance interface{}, value interface{}) {
 	}
 	structType := typ.GetGoType()
 	structValueType := typ.GetGoPointerValue()
-	structFieldCount := structType.NumMethod()
+	structFieldCount := structType.NumField()
 	for fieldIndex := 0; fieldIndex < structFieldCount; fieldIndex++ {
 		fieldType := structType.Field(fieldIndex)
 		fieldValue := structValueType.Field(fieldIndex)
