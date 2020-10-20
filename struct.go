@@ -30,17 +30,13 @@ func newStructType(baseTyp *baseType) structType {
 }
 
 func (typ structType) GetFields() []Field {
-	fields := getFieldsFromCache(typ.GetFullName())
-	if fields != nil {
-		return fields
-	}
-	fields = make([]Field, 0)
+	fields := make([]Field, 0)
 	fieldCount := typ.GetFieldCount()
 	for fieldIndex := 0; fieldIndex < fieldCount; fieldIndex++ {
 		field := typ.typ.Field(fieldIndex)
 		fields = append(fields, convertGoFieldToMemberField(field))
 	}
-	return putFieldsIntoCache(typ.GetFullName(), fields)
+	return fields
 }
 
 func (typ structType) GetFieldCount() int {
@@ -114,17 +110,7 @@ func (typ structType) GetAnonymousFieldCount() int {
 }
 
 func (typ structType) GetStructMethods() []Method {
-	var cacheKey string
-	if typ.isPointer {
-		cacheKey = "$" + typ.GetFullName()
-	} else {
-		cacheKey = typ.GetFullName()
-	}
-	methods := getMethodsFromCache(cacheKey)
-	if methods != nil {
-		return methods
-	}
-	methods = make([]Method, 0)
+	methods := make([]Method, 0)
 	methodCount := typ.GetStructMethodCount()
 	var method reflect.Method
 	for methodIndex := 0; methodIndex < methodCount; methodIndex++ {
@@ -135,7 +121,7 @@ func (typ structType) GetStructMethods() []Method {
 		}
 		methods = append(methods, convertGoMethodToMemberMethod(method))
 	}
-	return putMethodsIntoCache(cacheKey, methods)
+	return methods
 }
 
 func (typ structType) GetStructMethodCount() int {

@@ -199,15 +199,11 @@ func (typ baseType) Equals(anotherType Type) bool {
 
 func GetType(obj interface{}) Type {
 	typ, val, isPointer := GetGoTypeAndValue(obj)
-	typeFromCache := getTypeFromCache(typ, isPointer)
-	if typeFromCache != nil {
-		return typeFromCache
-	}
 	baseTyp := createBaseType(typ, val)
 	populatePointerInfo(obj, baseTyp, isPointer)
 	actualType := getActualTypeFromBaseType(baseTyp)
 	baseTyp.parentType = actualType
-	return putTypeIntoCache(actualType, isPointer)
+	return actualType
 }
 
 func populatePointerInfo(obj interface{}, baseType *baseType, isPointer bool) {
@@ -230,10 +226,6 @@ func GetTypeFromGoType(typ reflect.Type) Type {
 		typ = typ.Elem()
 		isPointer = true
 	}
-	typeFromCache := getTypeFromCache(typ, isPointer)
-	if typeFromCache != nil {
-		return typeFromCache
-	}
 	baseTyp := newBaseType(typ, reflect.Value{})
 	actualType := getActualTypeFromBaseType(baseTyp)
 	baseTyp.parentType = actualType
@@ -241,5 +233,5 @@ func GetTypeFromGoType(typ reflect.Type) Type {
 		baseTyp.ptrType = ptrType
 		baseTyp.isPointer = true
 	}
-	return putTypeIntoCache(actualType, isPointer)
+	return actualType
 }

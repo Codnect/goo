@@ -126,8 +126,8 @@ func (field memberField) SetValue(instance interface{}, value interface{}) {
 	if !typ.IsPointer() {
 		panic("Instance type must be a pointer")
 	}
-	structType := typ.ToStructType().GetGoType()
-	structValueType := typ.ToStructType().GetGoPointerValue()
+	structType := typ.GetGoType()
+	structValueType := typ.GetGoPointerValue()
 	structFieldCount := structType.NumMethod()
 	for fieldIndex := 0; fieldIndex < structFieldCount; fieldIndex++ {
 		fieldType := structType.Field(fieldIndex)

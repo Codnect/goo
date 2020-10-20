@@ -17,17 +17,13 @@ func newInterfaceType(baseTyp *baseType) interfaceType {
 }
 
 func (typ interfaceType) GetMethods() []Method {
-	methods := getMethodsFromCache(typ.GetFullName())
-	if methods != nil {
-		return methods
-	}
-	methods = make([]Method, 0)
+	methods := make([]Method, 0)
 	methodCount := typ.GetMethodCount()
 	for methodIndex := 0; methodIndex < methodCount; methodIndex++ {
 		method := typ.typ.Method(methodIndex)
 		methods = append(methods, convertGoMethodToMemberMethod(method))
 	}
-	return putMethodsIntoCache(typ.GetFullName(), methods)
+	return methods
 }
 
 func (typ interfaceType) GetMethodCount() int {
