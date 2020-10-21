@@ -80,7 +80,7 @@ func (integer signedIntegerType) Overflow(val interface{}) bool {
 	if err != nil {
 		panic(err)
 	}
-	return integer.GetGoValue().OverflowInt(integerValue)
+	return valType.GetGoValue().OverflowInt(integerValue)
 }
 
 func (integer signedIntegerType) NewInstance() interface{} {
@@ -108,7 +108,7 @@ func newUnsignedIntegerType(baseTyp *baseType) unsignedIntegerType {
 	}
 }
 
-func (integer unsignedIntegerType) GetNumberType() NumberType {
+func (integer unsignedIntegerType) GetType() NumberType {
 	return IntegerType
 }
 
@@ -140,7 +140,7 @@ func (integer unsignedIntegerType) Overflow(val interface{}) bool {
 	if err != nil {
 		panic(err)
 	}
-	return integer.GetGoValue().OverflowUint(integerValue)
+	return valType.GetGoValue().OverflowUint(integerValue)
 }
 
 func (integer unsignedIntegerType) NewInstance() interface{} {
@@ -196,7 +196,7 @@ func (float floatType) Overflow(val interface{}) bool {
 	if err != nil {
 		panic(err)
 	}
-	return float.GetGoValue().OverflowFloat(floatValue)
+	return valType.GetGoValue().OverflowFloat(floatValue)
 }
 
 func (float floatType) NewInstance() interface{} {

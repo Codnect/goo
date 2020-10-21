@@ -175,7 +175,7 @@ func (str stringType) getIntegerValue(strValue string, integer Integer) (resultV
 	if integer.Overflow(value) {
 		return nil, errors.New("The given value is out of range of the integer type : " + integer.String())
 	}
-	integerVal := reflect.New(integer.GetGoType())
+	integerVal := reflect.New(integer.GetGoType()).Elem()
 	if integer.IsSigned() {
 		integerVal.SetInt(signedValue)
 	} else {
@@ -245,7 +245,7 @@ func (str stringType) getFloatValue(strValue string, float Float) (resultValue i
 	var value float64
 	value, err = strconv.ParseFloat(strValue, 64)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	defer func() {
 		if r := recover(); r != nil {
@@ -255,31 +255,10 @@ func (str stringType) getFloatValue(strValue string, float Float) (resultValue i
 	if float.Overflow(value) {
 		return nil, errors.New("The given value is out of range of the float type : " + float.String())
 	}
-	floatValue := reflect.New(float.GetGoType())
+	floatValue := reflect.New(float.GetGoType()).Elem()
 	floatValue.SetFloat(value)
 	resultValue = floatValue.Interface()
 	return
-}
-
-func (str stringType) getFloatValueByBitSize(strValue string, bitSize BitSize) (resultValue interface{}, err error) {
-	var value float64
-	value, err = strconv.ParseFloat(strValue, 64)
-	if err != nil {
-		return nil, nil
-	}
-	overflow := false
-	if BitSize32 == bitSize {
-		// todo
-	} else if BitSize64 == bitSize {
-		// todo
-	} else {
-		panic("BitSize supports only 32 and 64")
-	}
-	if overflow {
-		return nil, errors.New("the given value is out of range of the float type")
-	}
-	// todo
-	return value, nil
 }
 
 func (str stringType) NewInstance() interface{} {
