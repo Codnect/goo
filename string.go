@@ -262,5 +262,5 @@ func (str stringType) getFloatValue(strValue string, float Float) (resultValue i
 }
 
 func (str stringType) NewInstance() interface{} {
-	return reflect.New(str.GetGoType()).Elem().Interface()
+	return reflect.New(str.GetGoType()).Interface()
 }

@@ -139,10 +139,7 @@ func (typ structType) Implements(i Interface) bool {
 }
 
 func (typ structType) NewInstance() interface{} {
-	if typ.isPointer {
-		return reflect.New(typ.GetGoType()).Interface()
-	}
-	return reflect.New(typ.GetGoType()).Elem().Interface()
+	return reflect.New(typ.GetGoType()).Interface()
 }
 
 func (typ structType) EmbeddedStruct(candidate Struct) bool {

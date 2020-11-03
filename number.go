@@ -84,10 +84,7 @@ func (integer signedIntegerType) Overflow(val interface{}) bool {
 }
 
 func (integer signedIntegerType) NewInstance() interface{} {
-	if integer.isPointer {
-		return reflect.New(integer.GetGoType()).Interface()
-	}
-	return reflect.New(integer.GetGoType()).Elem().Interface()
+	return reflect.New(integer.GetGoType()).Interface()
 }
 
 func (integer signedIntegerType) ToString(val interface{}) string {
@@ -144,10 +141,7 @@ func (integer unsignedIntegerType) Overflow(val interface{}) bool {
 }
 
 func (integer unsignedIntegerType) NewInstance() interface{} {
-	if integer.isPointer {
-		return reflect.New(integer.GetGoType()).Interface()
-	}
-	return reflect.New(integer.GetGoType()).Elem().Interface()
+	return reflect.New(integer.GetGoType()).Interface()
 }
 
 func (integer unsignedIntegerType) ToString(val interface{}) string {
@@ -200,10 +194,7 @@ func (float floatType) Overflow(val interface{}) bool {
 }
 
 func (float floatType) NewInstance() interface{} {
-	if float.isPointer {
-		return reflect.New(float.GetGoType()).Interface()
-	}
-	return reflect.New(float.GetGoType()).Elem().Interface()
+	return reflect.New(float.GetGoType()).Interface()
 }
 
 func (float floatType) ToString(val interface{}) string {
@@ -247,10 +238,7 @@ func (complex complexType) Overflow(val interface{}) bool {
 }
 
 func (complex complexType) NewInstance() interface{} {
-	if complex.isPointer {
-		return reflect.New(complex.GetGoType()).Interface()
-	}
-	return reflect.New(complex.GetGoType()).Elem().Interface()
+	return reflect.New(complex.GetGoType()).Interface()
 }
 
 func (complex complexType) ToString(val interface{}) string {

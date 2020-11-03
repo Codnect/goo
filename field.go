@@ -14,6 +14,7 @@ type Field interface {
 	GetType() Type
 	CanSet() bool
 	SetValue(instance interface{}, value interface{})
+	GetValue(instance interface{}) interface{}
 }
 
 type memberField struct {
@@ -137,4 +138,28 @@ func (field memberField) SetValue(instance interface{}, value interface{}) {
 			break
 		}
 	}
+}
+
+func (field memberField) GetValue(instance interface{}) interface{} {
+	typ := GetType(instance)
+	if !typ.IsStruct() {
+		panic("Instance must only be a struct")
+	}
+	structType := typ.GetGoType()
+	structValueType := typ.GetGoValue()
+	if typ.IsPointer() {
+		structValueType = typ.GetGoPointerValue()
+	}
+	structFieldCount := structType.NumField()
+	for fieldIndex := 0; fieldIndex < structFieldCount; fieldIndex++ {
+		fieldType := structType.Field(fieldIndex)
+		fieldValue := structValueType.Field(fieldIndex)
+		if fieldType.Name == field.name {
+			if fieldType.Type.Kind() == reflect.Ptr {
+				return fieldValue.Interface()
+			}
+			return fieldValue.Addr().Interface()
+		}
+	}
+	return nil
 }
