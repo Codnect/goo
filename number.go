@@ -89,8 +89,12 @@ func (integer signedIntegerType) NewInstance() interface{} {
 
 func (integer signedIntegerType) ToString(val interface{}) string {
 	valType := GetType(val)
-	if !valType.IsNumber() || IntegerType != valType.(Number).GetType() || !valType.(Integer).IsSigned() {
+	if !valType.IsNumber() || ComplexType == valType.(Number).GetType() {
 		panic("Incompatible type : " + valType.GetName())
+	}
+	numberType := valType.(Number).GetType()
+	if numberType == FloatType {
+		return fmt.Sprintf("%f", val)
 	}
 	return fmt.Sprintf("%d", val)
 }
