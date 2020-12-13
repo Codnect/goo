@@ -21,7 +21,7 @@ func TestMapType_GetKeyType(t *testing.T) {
 	assert.True(t, typ.IsMap())
 
 	mapType := typ.ToMapType()
-	assert.Equal(t, "bool", mapType.GetValueType().GetFullName())
+	assert.Equal(t, "string", mapType.GetKeyType().GetFullName())
 }
 
 func TestMapType_GetValueType(t *testing.T) {
