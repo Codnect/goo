@@ -112,6 +112,7 @@ func (str stringType) ToUint(val string) uint {
 	} else {
 		result, err = str.getIntegerValueByBitSize(val, BitSize64, false)
 	}
+
 	if err != nil {
 		panic(err)
 	}
@@ -182,17 +183,15 @@ func (str stringType) getIntegerValue(strValue string, integer Integer) (resultV
 		unsignedValue, err = strconv.ParseUint(strValue, 10, 64)
 		value = unsignedValue
 	}
+
 	if err != nil {
 		return nil, err
 	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = errors.New(r.(string))
-		}
-	}()
+
 	if integer.Overflow(value) {
 		return nil, errors.New("The given value is out of range of the integer type : " + integer.String())
 	}
+
 	integerVal := reflect.New(integer.GetGoType()).Elem()
 	if integer.IsSigned() {
 		integerVal.SetInt(signedValue)
@@ -265,11 +264,7 @@ func (str stringType) getFloatValue(strValue string, float Float) (resultValue i
 	if err != nil {
 		return nil, err
 	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = errors.New(r.(string))
-		}
-	}()
+
 	if float.Overflow(value) {
 		return nil, errors.New("The given value is out of range of the float type : " + float.String())
 	}

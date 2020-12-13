@@ -172,3 +172,11 @@ func TestImplementsForStruct(t *testing.T) {
 	assert.Equal(t, true, structType.Implements(GetType((*Bark)(nil)).(Interface)))
 	assert.Equal(t, true, structType.Implements(GetType((*Run)(nil)).(Interface)))
 }
+
+func TestStructType_EmbeddedStruct(t *testing.T) {
+	typ := GetType(Dog{})
+	assert.True(t, typ.ToStructType().EmbeddedStruct(GetType(Animal{}).ToStructType()))
+	assert.Panics(t, func() {
+		typ.ToStructType().EmbeddedStruct(nil)
+	})
+}
