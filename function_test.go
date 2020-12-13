@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func testFunction(name string, i int, val bool) (string, error) {
+func testFunction(name string, i int, val bool, test *string) (string, error) {
 	return "test", errors.New("test error")
 }
 
@@ -15,7 +15,7 @@ func TestFunctionType_GetFunctionParameterCount(t *testing.T) {
 	assert.True(t, typ.IsFunction())
 
 	functionType := typ.ToFunctionType()
-	assert.Equal(t, 3, functionType.GetFunctionParameterCount())
+	assert.Equal(t, 4, functionType.GetFunctionParameterCount())
 }
 
 func TestFunctionType_GetFunctionParameterTypes(t *testing.T) {
@@ -55,6 +55,7 @@ func TestFunctionType_Call(t *testing.T) {
 	args := make([]interface{}, 0)
 	args = append(args, "test")
 	args = append(args, 1)
+	args = append(args, nil)
 	args = append(args, nil)
 
 	outputs := functionType.Call(args)

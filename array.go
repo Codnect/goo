@@ -32,5 +32,6 @@ func (array arrayType) GetLength() int {
 }
 
 func (array arrayType) NewInstance() interface{} {
-	return reflect.ArrayOf(array.length, array.GetGoType()).Elem()
+	instance := reflect.New(array.GetGoType()).Interface()
+	return instance
 }

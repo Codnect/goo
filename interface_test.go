@@ -6,8 +6,8 @@ import (
 )
 
 type testInterface interface {
-	testMethod()
-	testMethod2() int
+	testMethod(name string, i int, val bool) (string, error)
+	testMethod2()
 }
 
 func TestInterfaceType_GetMethodCount(t *testing.T) {
