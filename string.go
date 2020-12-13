@@ -63,7 +63,12 @@ func (str stringType) ToInt(val string) int {
 	if err != nil {
 		panic(err)
 	}
-	return result.(int)
+
+	if sizeInBits == 32 {
+		return result.(int)
+	}
+	lastValue := result.(int64)
+	return int(lastValue)
 }
 
 func (str stringType) ToInt8(val string) int8 {
@@ -146,11 +151,19 @@ func (str stringType) ToUint64(val string) uint64 {
 }
 
 func (str stringType) ToFloat32(val string) float32 {
-	return 0
+	result, err := strconv.ParseFloat(val, BitSize32)
+	if err != nil {
+		panic("Wrong float-format")
+	}
+	return float32(result)
 }
 
 func (str stringType) ToFloat64(val string) float64 {
-	return 0
+	result, err := strconv.ParseFloat(val, BitSize64)
+	if err != nil {
+		panic("Wrong float-format")
+	}
+	return result
 }
 
 func (str stringType) getIntegerValue(strValue string, integer Integer) (resultValue interface{}, err error) {
@@ -201,19 +214,19 @@ func (str stringType) getIntegerValueByBitSize(strValue string, bitSize BitSize,
 	}
 	overflow := false
 	if isSigned {
-		if BitSize8 == bitSize && (math.MinInt8 > signedValue || math.MaxInt8 > signedValue) {
+		if BitSize8 == bitSize && (math.MinInt8 > signedValue || math.MaxInt8 < signedValue) {
 			overflow = true
-		} else if BitSize16 == bitSize && (math.MinInt16 > signedValue || math.MaxInt16 > signedValue) {
+		} else if BitSize16 == bitSize && (math.MinInt16 > signedValue || math.MaxInt16 < signedValue) {
 			overflow = true
-		} else if BitSize32 == bitSize && (math.MinInt32 > signedValue || math.MaxInt32 > signedValue) {
+		} else if BitSize32 == bitSize && (math.MinInt32 > signedValue || math.MaxInt32 < signedValue) {
 			overflow = true
 		}
 	} else {
-		if BitSize8 == bitSize && math.MaxUint8 > unsignedValue {
+		if BitSize8 == bitSize && math.MaxUint8 < unsignedValue {
 			overflow = true
-		} else if BitSize16 == bitSize && math.MaxUint16 > unsignedValue {
+		} else if BitSize16 == bitSize && math.MaxUint16 < unsignedValue {
 			overflow = true
-		} else if BitSize32 == bitSize && math.MaxUint32 > unsignedValue {
+		} else if BitSize32 == bitSize && math.MaxUint32 < unsignedValue {
 			overflow = true
 		}
 	}
