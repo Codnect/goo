@@ -13,7 +13,7 @@ type Product struct {
 	Name     string  `json:"name" yaml:"name" customTag:"customTagValue"`
 	price    float64 `json:"price" yaml:"price"`
 	Stock    `json:"stock" yaml:"stock" customTag:"customTagValue"`
-	supplier Supplier `json:"supplier" yaml:"supplier"`
+	supplier Supplier `json:invalid`
 }
 
 type Supplier struct {
@@ -112,6 +112,14 @@ func TestMemberField_SetValue(t *testing.T) {
 	assert.Panics(t, func() {
 		structType.GetFields()[3].GetValue(product)
 	})
+
+	assert.Panics(t, func() {
+		structType.GetFields()[0].SetValue(23, nil)
+	})
+
+	assert.Panics(t, func() {
+		structType.GetFields()[0].SetValue(*product, nil)
+	})
 }
 
 func TestMemberField_GetValue(t *testing.T) {
@@ -144,6 +152,12 @@ func TestMemberField_GetValue(t *testing.T) {
 	assert.Panics(t, func() {
 		structType.GetFields()[3].SetValue(product, Supplier{Name: "test-supplier-2"})
 	})
+
+	assert.Panics(t, func() {
+		structType.GetFields()[0].GetValue(23)
+	})
+
+	assert.Nil(t, structType.GetFields()[1].GetValue(Stock{}))
 }
 
 func TestMemberField_GetTags(t *testing.T) {
@@ -166,7 +180,7 @@ func TestMemberField_GetTags(t *testing.T) {
 	assert.Equal(t, 3, len(structType.GetFields()[0].GetTags()))
 	assert.Equal(t, 2, len(structType.GetFields()[1].GetTags()))
 	assert.Equal(t, 3, len(structType.GetFields()[2].GetTags()))
-	assert.Equal(t, 2, len(structType.GetFields()[3].GetTags()))
+	assert.Equal(t, 0, len(structType.GetFields()[3].GetTags()))
 
 	// name
 	tag, err := structType.GetFields()[0].GetTagByName("json")
