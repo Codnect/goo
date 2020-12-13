@@ -2,6 +2,7 @@ package goo
 
 import (
 	"fmt"
+	"math/bits"
 	"reflect"
 	"strconv"
 )
@@ -18,10 +19,10 @@ type BitSize int
 
 const (
 	BitSize8   BitSize = 8
-	BitSize16          = 16
-	BitSize32          = 32
-	BitSize64          = 64
-	BitSize128         = 128
+	BitSize16  BitSize = 16
+	BitSize32  BitSize = 32
+	BitSize64  BitSize = 64
+	BitSize128 BitSize = 128
 )
 
 type Number interface {
@@ -55,13 +56,18 @@ func (integer signedIntegerType) GetType() NumberType {
 func (integer signedIntegerType) GetBitSize() BitSize {
 	switch integer.kind {
 	case reflect.Int:
-		return BitSize32
+		if bits.UintSize == 32 {
+			return BitSize32
+		}
+		return BitSize64
 	case reflect.Int64:
 		return BitSize64
 	case reflect.Int8:
 		return BitSize8
 	case reflect.Int16:
 		return BitSize16
+	case reflect.Int32:
+		return BitSize32
 	}
 	panic("this is not a signed integer type")
 }
@@ -80,7 +86,7 @@ func (integer signedIntegerType) Overflow(val interface{}) bool {
 	if err != nil {
 		panic(err)
 	}
-	return valType.GetGoValue().OverflowInt(integerValue)
+	return integer.GetGoValue().OverflowInt(integerValue)
 }
 
 func (integer signedIntegerType) NewInstance() interface{} {
@@ -89,12 +95,8 @@ func (integer signedIntegerType) NewInstance() interface{} {
 
 func (integer signedIntegerType) ToString(val interface{}) string {
 	valType := GetType(val)
-	if !valType.IsNumber() || ComplexType == valType.(Number).GetType() {
+	if !valType.IsNumber() || IntegerType != valType.(Number).GetType() || !valType.(Integer).IsSigned() {
 		panic("Incompatible type : " + valType.GetName())
-	}
-	numberType := valType.(Number).GetType()
-	if numberType == FloatType {
-		return fmt.Sprintf("%f", val)
 	}
 	return fmt.Sprintf("%d", val)
 }
@@ -116,13 +118,18 @@ func (integer unsignedIntegerType) GetType() NumberType {
 func (integer unsignedIntegerType) GetBitSize() BitSize {
 	switch integer.kind {
 	case reflect.Uint:
-		return BitSize32
+		if bits.UintSize == 32 {
+			return BitSize32
+		}
+		return BitSize64
 	case reflect.Uint64:
 		return BitSize64
 	case reflect.Uint8:
 		return BitSize8
 	case reflect.Uint16:
 		return BitSize16
+	case reflect.Uint32:
+		return BitSize32
 	}
 	panic("this is not a unsigned integer type")
 }
@@ -141,7 +148,7 @@ func (integer unsignedIntegerType) Overflow(val interface{}) bool {
 	if err != nil {
 		panic(err)
 	}
-	return valType.GetGoValue().OverflowUint(integerValue)
+	return integer.GetGoValue().OverflowUint(integerValue)
 }
 
 func (integer unsignedIntegerType) NewInstance() interface{} {

@@ -156,7 +156,7 @@ func (str stringType) ToUint64(val string) uint64 {
 }
 
 func (str stringType) ToFloat32(val string) float32 {
-	result, err := strconv.ParseFloat(val, BitSize32)
+	result, err := strconv.ParseFloat(val, int(BitSize32))
 	if err != nil {
 		panic("Wrong float-format")
 	}
@@ -164,7 +164,7 @@ func (str stringType) ToFloat32(val string) float32 {
 }
 
 func (str stringType) ToFloat64(val string) float64 {
-	result, err := strconv.ParseFloat(val, BitSize64)
+	result, err := strconv.ParseFloat(val, int(BitSize64))
 	if err != nil {
 		panic("Wrong float-format")
 	}
