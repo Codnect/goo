@@ -5,7 +5,7 @@ type Exportable interface {
 }
 
 type Invokable interface {
-	Invoke(obj interface{}, args ...interface{}) interface{}
+	Invoke(obj interface{}, args ...interface{}) []interface{}
 }
 
 type Member interface {

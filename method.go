@@ -39,8 +39,50 @@ func (method memberMethod) String() string {
 	return method.name
 }
 
-func (method memberMethod) Invoke(obj interface{}, args ...interface{}) interface{} {
-	return nil
+func (method memberMethod) Invoke(obj interface{}, args ...interface{}) []interface{} {
+	typ := GetType(obj)
+	if !typ.IsStruct() {
+		panic("obj must be a struct instance")
+	}
+
+	structType := typ.ToStructType()
+	structMethods := structType.GetStructMethods()
+	for _, structMethod := range structMethods {
+		if method.typ == structMethod.(memberMethod).typ {
+			parameterCount := method.GetMethodParameterCount()
+			if (args == nil && parameterCount != 1) || (args != nil && len(args) != parameterCount-1) {
+				panic("Parameter counts don't match argument counts")
+			}
+
+			inputs := make([]reflect.Value, 0)
+
+			tempArray := make([]interface{}, 1)
+			tempArray[0] = obj
+
+			args = append(tempArray[:], args[:]...)
+
+			for index, arg := range args {
+				if arg == nil {
+					paramType := method.GetMethodParameterTypes()[index]
+					if paramType.IsPointer() {
+						inputs = append(inputs, reflect.New(paramType.GetGoPointerType()).Elem())
+					} else {
+						inputs = append(inputs, reflect.New(paramType.GetGoType()).Elem())
+					}
+				} else {
+					inputs = append(inputs, reflect.ValueOf(arg))
+				}
+			}
+
+			outputs := make([]interface{}, 0)
+			results := structMethod.(memberMethod).fun.Call(inputs)
+			for _, outputParam := range results {
+				outputs = append(outputs, outputParam.Interface())
+			}
+			return outputs
+		}
+	}
+	panic("Method not found")
 }
 
 func (method memberMethod) GetMethodReturnTypeCount() int {

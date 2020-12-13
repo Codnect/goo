@@ -38,6 +38,10 @@ func (dog Dog) Run() {
 	log.Print("Run")
 }
 
+func (dog Dog) Test(arg string, i *int) {
+
+}
+
 type Person struct {
 	name    string
 	Surname string
