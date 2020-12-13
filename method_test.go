@@ -75,7 +75,23 @@ func TestMemberMethod_GetMethodReturnTypes(t *testing.T) {
 }
 
 func TestMemberMethod_Invoke(t *testing.T) {
+	typ := GetType(Dog{})
+	structType := typ.ToStructType()
+	methods := structType.GetStructMethods()
 
+	assert.NotPanics(t, func() {
+		methods[0].Invoke(Dog{})
+		methods[2].Invoke(Dog{}, nil, nil)
+		methods[2].Invoke(Dog{}, "test", nil)
+	})
+
+	assert.Panics(t, func() {
+		methods[0].Invoke(Dog{}, "arg1", "arg2")
+	})
+
+	assert.Panics(t, func() {
+		methods[0].Invoke(Product{})
+	})
 }
 
 func TestMemberMethod_IsExported(t *testing.T) {
