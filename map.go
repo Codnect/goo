@@ -32,5 +32,7 @@ func (m mapType) GetValueType() Type {
 }
 
 func (m mapType) NewInstance() interface{} {
-	return reflect.MapOf(m.keyType.GetGoType(), m.valueType.GetGoType())
+	mapType := reflect.MapOf(m.keyType.GetGoType(), m.valueType.GetGoType())
+	instance := reflect.MakeMapWithSize(mapType, 0)
+	return instance.Interface()
 }
