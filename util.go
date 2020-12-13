@@ -41,10 +41,8 @@ func getActualTypeFromBaseType(baseTyp *baseType) Type {
 		return newArrayType(baseTyp)
 	} else if baseTyp.IsSlice() {
 		return newSliceType(baseTyp)
-	} else {
-		panic(baseTyp.GetName() + " isn't supported for now")
 	}
-	return baseTyp
+	panic(baseTyp.GetName() + " isn't supported for now")
 }
 
 func createBaseType(typ reflect.Type, val reflect.Value) *baseType {
