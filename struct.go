@@ -163,16 +163,3 @@ func (typ structType) embeddedStruct(parent Struct, candidate Struct) bool {
 	}
 	return false
 }
-
-func (typ structType) visitEmbeddedStruct(parent Struct, embeddeds []Struct) []Struct {
-	fields := parent.GetFields()
-	for _, field := range fields {
-		if field.IsAnonymous() && field.GetType().IsStruct() {
-			embeddeds = append(embeddeds, field.GetType().(Struct))
-			if field.GetType().(Struct).GetFieldCount() > 0 {
-				embeddeds = typ.visitEmbeddedStruct(field.GetType().(Struct), embeddeds)
-			}
-		}
-	}
-	return embeddeds
-}
