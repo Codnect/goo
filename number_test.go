@@ -19,6 +19,10 @@ func TestSignedIntegerType(t *testing.T) {
 	}
 
 	assert.Panics(t, func() {
+		intNumberType.Overflow(&Animal{})
+	})
+
+	assert.Panics(t, func() {
 		intNumberType.ToString("test")
 	})
 
@@ -118,6 +122,10 @@ func TestUnSignedIntegerType(t *testing.T) {
 	} else {
 		assert.Equal(t, BitSize64, intNumberType.GetBitSize())
 	}
+
+	assert.Panics(t, func() {
+		intNumberType.Overflow(&Animal{})
+	})
 
 	assert.Panics(t, func() {
 		intNumberType.ToString("test")
@@ -337,9 +345,26 @@ func TestFloatType_NewInstance(t *testing.T) {
 }
 
 func TestFloatType_Overflow(t *testing.T) {
+	float32Number := float32(23.2)
+	typ := GetType(float32Number)
+	assert.True(t, typ.IsNumber())
 
+	numberType := typ.ToNumberType()
+	assert.Panics(t, func() {
+		numberType.Overflow(&Animal{})
+	})
 }
 
 func TestFloatType_ToString(t *testing.T) {
+	floatNumber := 23.2
+	typ := GetType(floatNumber)
+	assert.True(t, typ.IsNumber())
 
+	numberType := typ.ToNumberType()
+
+	assert.Panics(t, func() {
+		numberType.ToString(&Animal{})
+	})
+
+	assert.Equal(t, "23.200000", numberType.ToString(floatNumber))
 }
