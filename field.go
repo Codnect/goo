@@ -154,10 +154,17 @@ func (field memberField) GetValue(instance interface{}) interface{} {
 	for fieldIndex := 0; fieldIndex < structFieldCount; fieldIndex++ {
 		fieldType := structType.Field(fieldIndex)
 		fieldValue := structValueType.Field(fieldIndex)
+
 		if fieldType.Name == field.name {
+
+			if !isExportedField(fieldType) {
+				panic("Field is not exported, you cannot get the value : " + field.name)
+			}
+
 			if fieldType.Type.Kind() == reflect.Ptr {
 				return fieldValue.Interface()
 			}
+
 			return fieldValue.Addr().Interface()
 		}
 	}

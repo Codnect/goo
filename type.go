@@ -76,6 +76,9 @@ func (typ baseType) GetName() string {
 }
 
 func (typ baseType) GetFullName() string {
+	if typ.packageFullName == "" {
+		return typ.name
+	}
 	return typ.packageFullName + "." + typ.name
 }
 

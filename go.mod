@@ -1,4 +1,4 @@
-module github.com/codnect/goo
+module github.com/procyon-projects/goo
 
 go 1.13
 

@@ -37,5 +37,5 @@ func (b booleanType) ToString(value bool) string {
 }
 
 func (b booleanType) NewInstance() interface{} {
-	return reflect.New(b.GetGoType()).Elem().Interface()
+	return reflect.New(b.GetGoType()).Interface()
 }

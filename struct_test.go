@@ -35,14 +35,14 @@ func (dog Dog) Run() {
 }
 
 type Person struct {
-	Name    string
+	name    string
 	Surname string
 	age     int
-	address Address
+	Address Address
 }
 
 func (person Person) GetName() string {
-	return person.Name
+	return person.name
 }
 
 func (person Person) GetSurname() string {
@@ -54,7 +54,7 @@ func (person Person) getAge() int {
 }
 
 func (person *Person) GetAddress() Address {
-	return person.address
+	return person.Address
 }
 
 type Address struct {
@@ -105,9 +105,9 @@ func TestGetNamesForStruct(t *testing.T) {
 
 func testGetNamesForStruct(t *testing.T, typ Type) {
 	assert.Equal(t, "Animal", typ.GetName())
-	assert.Equal(t, "github.com.codnect.goo.Animal", typ.GetFullName())
+	assert.Equal(t, "github.com.procyon.projects.goo.Animal", typ.GetFullName())
 	assert.Equal(t, "goo", typ.GetPackageName())
-	assert.Equal(t, "github.com.codnect.goo", typ.GetPackageFullName())
+	assert.Equal(t, "github.com.procyon.projects.goo", typ.GetPackageFullName())
 	assert.Equal(t, typ.(Struct), typ.ToStructType())
 }
 
