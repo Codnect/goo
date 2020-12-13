@@ -46,8 +46,24 @@ func TestStringType_ToNumber(t *testing.T) {
 
 	stringType := typ.ToStringType()
 
+	// float32
+	val, err := stringType.ToNumber("23.75", GetType(float32(0)).ToNumberType())
+	assert.Nil(t, err)
+	assert.Equal(t, float32(23.75), val)
+
+	val, err = stringType.ToNumber("", GetType(float32(0)).ToNumberType())
+	assert.NotNil(t, err)
+
+	// float64
+	val, err = stringType.ToNumber("23.75", GetType(float64(0)).ToNumberType())
+	assert.Nil(t, err)
+	assert.Equal(t, 23.75, val)
+
+	val, err = stringType.ToNumber("", GetType(float64(0)).ToNumberType())
+	assert.NotNil(t, err)
+
 	// int
-	val, err := stringType.ToNumber("23", GetType(0).ToNumberType())
+	val, err = stringType.ToNumber("23", GetType(0).ToNumberType())
 	assert.Nil(t, err)
 	assert.Equal(t, 23, val)
 
@@ -64,8 +80,7 @@ func TestStringType_ToNumber(t *testing.T) {
 	assert.Equal(t, int8(-128), val)
 
 	val, err = stringType.ToNumber("-150", GetType(int8(0)).ToNumberType())
-	assert.Nil(t, err)
-	assert.Equal(t, int8(106), val)
+	assert.NotNil(t, err)
 
 	val, err = stringType.ToNumber("", GetType(int8(0)).ToNumberType())
 	assert.NotNil(t, err)
@@ -80,8 +95,7 @@ func TestStringType_ToNumber(t *testing.T) {
 	assert.Equal(t, int16(-15040), val)
 
 	val, err = stringType.ToNumber("32980", GetType(int16(0)).ToNumberType())
-	assert.Nil(t, err)
-	assert.Equal(t, int16(-32556), val)
+	assert.NotNil(t, err)
 
 	val, err = stringType.ToNumber("", GetType(int16(0)).ToNumberType())
 	assert.NotNil(t, err)
@@ -96,8 +110,7 @@ func TestStringType_ToNumber(t *testing.T) {
 	assert.Equal(t, int32(-243293245), val)
 
 	val, err = stringType.ToNumber("23243293245", GetType(int32(0)).ToNumberType())
-	assert.Nil(t, err)
-	assert.Equal(t, int32(1768456765), val)
+	assert.NotNil(t, err)
 
 	val, err = stringType.ToNumber("", GetType(int64(0)).ToNumberType())
 	assert.NotNil(t, err)
@@ -126,8 +139,7 @@ func TestStringType_ToNumber(t *testing.T) {
 	assert.NotNil(t, err)
 
 	val, err = stringType.ToNumber("258", GetType(uint8(0)).ToNumberType())
-	assert.Nil(t, err)
-	assert.Equal(t, uint8(2), val)
+	assert.NotNil(t, err)
 
 	val, err = stringType.ToNumber("", GetType(uint8(0)).ToNumberType())
 	assert.NotNil(t, err)
@@ -141,8 +153,7 @@ func TestStringType_ToNumber(t *testing.T) {
 	assert.NotNil(t, err)
 
 	val, err = stringType.ToNumber("68419", GetType(uint16(0)).ToNumberType())
-	assert.Nil(t, err)
-	assert.Equal(t, uint16(2883), val)
+	assert.NotNil(t, err)
 
 	val, err = stringType.ToNumber("", GetType(uint16(0)).ToNumberType())
 	assert.NotNil(t, err)
@@ -156,8 +167,7 @@ func TestStringType_ToNumber(t *testing.T) {
 	assert.NotNil(t, err)
 
 	val, err = stringType.ToNumber("254684571411", GetType(uint32(0)).ToNumberType())
-	assert.Nil(t, err)
-	assert.Equal(t, uint32(1281500947), val)
+	assert.NotNil(t, err)
 
 	val, err = stringType.ToNumber("", GetType(uint32(0)).ToNumberType())
 	assert.NotNil(t, err)
