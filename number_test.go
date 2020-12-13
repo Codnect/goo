@@ -131,3 +131,75 @@ func TestUnSignedIntegerType_NewInstance(t *testing.T) {
 	val = int64NumberType.NewInstance()
 	assert.NotNil(t, val.(*uint64))
 }
+
+func TestComplexType_GetType(t *testing.T) {
+
+}
+
+func TestComplexType_ToString(t *testing.T) {
+	complexNumber := complex(14.3, 22.5)
+	typ := GetType(complexNumber)
+	assert.True(t, typ.IsNumber())
+
+	numberType := typ.ToNumberType()
+	assert.Equal(t, ComplexType, numberType.GetType())
+	assert.Equal(t, "(14.300000+22.500000i)", numberType.ToString(complexNumber))
+}
+
+func TestComplexType_GetBitSize(t *testing.T) {
+	complexNumber := complex(14.3, 22.5)
+	typ := GetType(complexNumber)
+	assert.True(t, typ.IsNumber())
+
+	numberType := typ.ToNumberType()
+	assert.Equal(t, ComplexType, numberType.GetType())
+	assert.Equal(t, BitSize128, numberType.GetBitSize())
+}
+
+func TestComplexType_Overflow(t *testing.T) {
+	complexNumber := complex(14.3, 22.5)
+	typ := GetType(complexNumber)
+	assert.True(t, typ.IsNumber())
+
+	numberType := typ.ToNumberType()
+	assert.Equal(t, ComplexType, numberType.GetType())
+	assert.Panics(t, func() {
+		numberType.Overflow(nil)
+	})
+}
+
+func TestComplexType_NewInstance(t *testing.T) {
+	complexNumber := complex(14.3, 22.5)
+	typ := GetType(complexNumber)
+	assert.True(t, typ.IsNumber())
+
+	numberType := typ.ToNumberType()
+	assert.Equal(t, ComplexType, numberType.GetType())
+
+	instance := numberType.NewInstance()
+	assert.NotNil(t, instance)
+}
+
+func TestComplexType_GetRealData(t *testing.T) {
+	complexNumber := complex(14.3, 22.5)
+	typ := GetType(complexNumber)
+	assert.True(t, typ.IsNumber())
+
+	numberType := typ.ToNumberType()
+	assert.Equal(t, ComplexType, numberType.GetType())
+
+	complexType := numberType.(Complex)
+	assert.Equal(t, 14.3, complexType.GetRealData(complexNumber))
+}
+
+func TestComplexType_GetImaginaryData(t *testing.T) {
+	complexNumber := complex(14.3, 22.5)
+	typ := GetType(complexNumber)
+	assert.True(t, typ.IsNumber())
+
+	numberType := typ.ToNumberType()
+	assert.Equal(t, ComplexType, numberType.GetType())
+
+	complexType := numberType.(Complex)
+	assert.Equal(t, 22.5, complexType.GetImaginaryData(complexNumber))
+}

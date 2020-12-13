@@ -218,6 +218,8 @@ func (float floatType) ToString(val interface{}) string {
 
 type Complex interface {
 	Number
+	GetImaginaryData(val interface{}) interface{}
+	GetRealData(val interface{}) interface{}
 }
 
 type complexType struct {
@@ -246,6 +248,30 @@ func (complex complexType) GetBitSize() BitSize {
 
 func (complex complexType) Overflow(val interface{}) bool {
 	panic("It does not support Overflow for now")
+}
+
+func (complex complexType) GetImaginaryData(val interface{}) interface{} {
+	valType := GetType(val)
+	if !valType.IsNumber() || ComplexType != valType.(Number).GetType() {
+		panic("Given type is not compatible with complex")
+	}
+
+	if complex.GetBitSize() == BitSize64 {
+		return imag(val.(complex64))
+	}
+	return imag(val.(complex128))
+}
+
+func (complex complexType) GetRealData(val interface{}) interface{} {
+	valType := GetType(val)
+	if !valType.IsNumber() || ComplexType != valType.(Number).GetType() {
+		panic("Given type is not compatible with complex")
+	}
+
+	if complex.GetBitSize() == BitSize64 {
+		return real(val.(complex64))
+	}
+	return real(val.(complex128))
 }
 
 func (complex complexType) NewInstance() interface{} {
