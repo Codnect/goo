@@ -52,7 +52,7 @@ func (method memberMethod) GetMethodReturnTypes() []Type {
 	returnTypeCount := method.GetMethodReturnTypeCount()
 	for returnTypeIndex := 0; returnTypeIndex < returnTypeCount; returnTypeIndex++ {
 		returnType := method.typ.Out(returnTypeIndex)
-		returnTypes = append(returnTypes, GetTypeFromGoType(returnType))
+		returnTypes = append(returnTypes, getTypeFromGoType(returnType))
 	}
 	return returnTypes
 }
@@ -66,7 +66,7 @@ func (method memberMethod) GetMethodParameterTypes() []Type {
 	parameterCount := method.GetMethodParameterCount()
 	for paramIndex := 0; paramIndex < parameterCount; paramIndex++ {
 		paramTyp := method.typ.In(paramIndex)
-		parameterTypes = append(parameterTypes, GetTypeFromGoType(paramTyp))
+		parameterTypes = append(parameterTypes, getTypeFromGoType(paramTyp))
 	}
 	return parameterTypes
 }

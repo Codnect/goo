@@ -201,7 +201,7 @@ func (typ baseType) Equals(anotherType Type) bool {
 }
 
 func GetType(obj interface{}) Type {
-	typ, val, isPointer := GetGoTypeAndValue(obj)
+	typ, val, isPointer := getGoTypeAndValue(obj)
 	baseTyp := createBaseType(typ, val)
 	populatePointerInfo(obj, baseTyp, isPointer)
 	actualType := getActualTypeFromBaseType(baseTyp)
@@ -218,7 +218,7 @@ func populatePointerInfo(obj interface{}, baseType *baseType, isPointer bool) {
 	}
 }
 
-func GetTypeFromGoType(typ reflect.Type) Type {
+func getTypeFromGoType(typ reflect.Type) Type {
 	if typ == nil {
 		panic("Type cannot be nil")
 	}

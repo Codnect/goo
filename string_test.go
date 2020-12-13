@@ -1,7 +1,9 @@
 package goo
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
+	"math"
 	"testing"
 )
 
@@ -51,6 +53,9 @@ func TestStringType_ToNumber(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, float32(23.75), val)
 
+	val, err = stringType.ToNumber(fmt.Sprintf("%f", math.MaxFloat64-1.0), GetType(float32(0)).ToNumberType())
+	assert.NotNil(t, err)
+
 	val, err = stringType.ToNumber("", GetType(float32(0)).ToNumberType())
 	assert.NotNil(t, err)
 
@@ -69,6 +74,10 @@ func TestStringType_ToNumber(t *testing.T) {
 
 	val, err = stringType.ToNumber("", GetType(0).ToNumberType())
 	assert.NotNil(t, err)
+
+	assert.Panics(t, func() {
+		stringType.ToNumber("", nil)
+	})
 
 	// int8
 	val, err = stringType.ToNumber("23", GetType(int8(0)).ToNumberType())
@@ -184,6 +193,9 @@ func TestStringType_ToNumber(t *testing.T) {
 	assert.NotNil(t, err)
 
 	val, err = stringType.ToNumber("", GetType(uint64(0)).ToNumberType())
+	assert.NotNil(t, err)
+
+	val, err = stringType.ToNumber("", GetType(complex(1, 2)).ToNumberType())
 	assert.NotNil(t, err)
 }
 

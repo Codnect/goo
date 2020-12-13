@@ -16,7 +16,7 @@ type sliceType struct {
 func newSliceType(baseTyp *baseType) Slice {
 	return sliceType{
 		baseTyp,
-		GetTypeFromGoType(baseTyp.GetGoType().Elem()),
+		getTypeFromGoType(baseTyp.GetGoType().Elem()),
 	}
 }
 

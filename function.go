@@ -26,7 +26,7 @@ func (fun functionType) GetFunctionParameterTypes() []Type {
 	parameterCount := fun.GetFunctionParameterCount()
 	for paramIndex := 0; paramIndex < parameterCount; paramIndex++ {
 		paramTyp := fun.typ.In(paramIndex)
-		parameterTypes = append(parameterTypes, GetTypeFromGoType(paramTyp))
+		parameterTypes = append(parameterTypes, getTypeFromGoType(paramTyp))
 	}
 	return parameterTypes
 }
@@ -40,7 +40,7 @@ func (fun functionType) GetFunctionReturnTypes() []Type {
 	returnTypeCount := fun.GetFunctionReturnTypeCount()
 	for returnTypeIndex := 0; returnTypeIndex < returnTypeCount; returnTypeIndex++ {
 		returnType := fun.typ.Out(returnTypeIndex)
-		returnTypes = append(returnTypes, GetTypeFromGoType(returnType))
+		returnTypes = append(returnTypes, getTypeFromGoType(returnType))
 	}
 	return returnTypes
 }

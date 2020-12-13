@@ -198,7 +198,7 @@ func (float floatType) Overflow(val interface{}) bool {
 	if err != nil {
 		panic(err)
 	}
-	return valType.GetGoValue().OverflowFloat(floatValue)
+	return float.GetGoValue().OverflowFloat(floatValue)
 }
 
 func (float floatType) NewInstance() interface{} {
