@@ -8,6 +8,7 @@ import (
 type testInterface interface {
 	testMethod(name string, i int, val bool) (string, error)
 	testMethod2()
+	TestMethod3()
 }
 
 func TestInterfaceType_GetMethodCount(t *testing.T) {
@@ -15,7 +16,7 @@ func TestInterfaceType_GetMethodCount(t *testing.T) {
 	assert.True(t, typ.IsInterface())
 
 	interfaceType := typ.ToInterfaceType()
-	assert.Equal(t, 2, interfaceType.GetMethodCount())
+	assert.Equal(t, 3, interfaceType.GetMethodCount())
 }
 
 func TestInterfaceType_GetMethods(t *testing.T) {
@@ -23,5 +24,5 @@ func TestInterfaceType_GetMethods(t *testing.T) {
 	assert.True(t, typ.IsInterface())
 
 	interfaceType := typ.ToInterfaceType()
-	assert.Len(t, interfaceType.GetMethods(), 2)
+	assert.Len(t, interfaceType.GetMethods(), 3)
 }

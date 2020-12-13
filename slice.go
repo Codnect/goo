@@ -25,5 +25,6 @@ func (slice sliceType) GetElementType() Type {
 }
 
 func (slice sliceType) NewInstance() interface{} {
-	return reflect.SliceOf(slice.GetGoType()).Elem()
+	instance := reflect.MakeSlice(slice.GetGoType(), slice.val.Len(), slice.val.Cap()).Interface()
+	return instance
 }
