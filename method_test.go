@@ -86,6 +86,7 @@ func TestMemberMethod_Invoke(t *testing.T) {
 	})
 
 	assert.Panics(t, func() {
+		methods[0].Invoke(2)
 		methods[0].Invoke(Dog{}, "arg1", "arg2")
 	})
 
