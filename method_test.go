@@ -83,10 +83,15 @@ func TestMemberMethod_Invoke(t *testing.T) {
 		methods[0].Invoke(Dog{})
 		methods[2].Invoke(Dog{}, nil, nil)
 		methods[2].Invoke(Dog{}, "test", nil)
+		outputs := methods[3].Invoke(Dog{})
+		assert.Len(t, outputs, 1)
 	})
 
 	assert.Panics(t, func() {
 		methods[0].Invoke(2)
+	})
+
+	assert.Panics(t, func() {
 		methods[0].Invoke(Dog{}, "arg1", "arg2")
 	})
 

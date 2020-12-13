@@ -42,6 +42,10 @@ func (dog Dog) Test(arg string, i *int) {
 
 }
 
+func (dog Dog) TestOutputParam() string {
+	return "TestOutputParam"
+}
+
 type Person struct {
 	name    string
 	Surname string

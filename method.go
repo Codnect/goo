@@ -48,7 +48,7 @@ func (method memberMethod) Invoke(obj interface{}, args ...interface{}) []interf
 	structType := typ.ToStructType()
 	structMethods := structType.GetStructMethods()
 	for _, structMethod := range structMethods {
-		if method.typ == structMethod.(memberMethod).typ {
+		if method.GetName() == structMethod.GetName() {
 			parameterCount := method.GetMethodParameterCount()
 			if (args == nil && parameterCount != 1) || (args != nil && len(args) != parameterCount-1) {
 				panic("Parameter counts don't match argument counts")
