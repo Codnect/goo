@@ -1,6 +1,6 @@
 # GOO
 [![Go Report Card](https://goreportcard.com/badge/github.com/procyon-projects/goo)](https://goreportcard.com/report/github.com/procyon-projects/goo)
-[![codecov](https://codecov.io/gh/procyon-projects/goo/branch/main/graph/badge.svg?token=EOFTB97YHD)](https://codecov.io/gh/procyon-projects/goo)
+[![codecov](https://codecov.io/gh/procyon-projects/goo/branch/master/graph/badge.svg?token=EOFTB97YHD)](https://codecov.io/gh/procyon-projects/goo)
 [![Build Status](https://travis-ci.com/procyon-projects/goo.svg?branch=master)](https://travis-ci.com/procyon-projects/goo)
 [![Gitter](https://badges.gitter.im/procyon-projects/community.svg)](https://gitter.im/procyon-projects/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
