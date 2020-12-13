@@ -18,7 +18,7 @@ type arrayType struct {
 func newArrayType(baseTyp *baseType) Array {
 	return arrayType{
 		baseTyp,
-		GetTypeFromGoType(baseTyp.GetGoType().Elem()),
+		getTypeFromGoType(baseTyp.GetGoType().Elem()),
 		baseTyp.GetGoType().Len(),
 	}
 }

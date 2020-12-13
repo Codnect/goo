@@ -113,3 +113,16 @@ func TestType_Instantiable(t *testing.T) {
 	typ = GetType(testFunction)
 	assert.False(t, typ.IsInstantiable())
 }
+
+func TestBaseType_Equals(t *testing.T) {
+	typ := GetType(Animal{})
+	assert.True(t, typ.Equals(GetType(Animal{})))
+	assert.False(t, typ.Equals(GetType(Dog{})))
+	assert.False(t, typ.Equals(nil))
+}
+
+func TestType_GetTypeFromGoTypeWithNil(t *testing.T) {
+	assert.Panics(t, func() {
+		getTypeFromGoType(nil)
+	})
+}

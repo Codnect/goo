@@ -45,10 +45,8 @@ func (str stringType) ToNumber(val string, number Number) (interface{}, error) {
 		return str.getIntegerValue(val, number.(Integer))
 	} else if FloatType == numberType {
 		return str.getFloatValue(val, number.(Float))
-	} else if ComplexType == numberType {
-		return nil, errors.New("complex numbers does not support for now")
 	}
-	panic("number type is not valid")
+	return nil, errors.New("complex numbers does not support for now")
 }
 
 func (str stringType) ToInt(val string) int {

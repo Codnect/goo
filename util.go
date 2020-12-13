@@ -65,7 +65,7 @@ func getTypeName(typ reflect.Type, val reflect.Value) string {
 	return typ.Name()
 }
 
-func GetGoTypeAndValue(obj interface{}) (reflect.Type, reflect.Value, bool) {
+func getGoTypeAndValue(obj interface{}) (reflect.Type, reflect.Value, bool) {
 	typ := reflect.TypeOf(obj)
 	if typ == nil {
 		panic("Type cannot be determined as the given object is nil")
@@ -133,14 +133,6 @@ func getPackageFullName(typ reflect.Type, val reflect.Value) string {
 	return sanitizedName(typ.PkgPath())
 }
 
-func getStructOrInterfaceFullName(typ reflect.Type) string {
-	defer func() {
-		if r := recover(); r != nil {
-		}
-	}()
-	return sanitizedName(typ.PkgPath()) + "." + getBaseTypeName(typ)
-}
-
 func getFunctionName(val reflect.Value) string {
 	fullName := runtime.FuncForPC(val.Pointer()).Name()
 	dotLastIndex := strings.LastIndex(fullName, ".")
@@ -170,7 +162,7 @@ func getFunctionPackageName(val reflect.Value) string {
 
 func convertGoFieldToMemberField(goField reflect.StructField) Field {
 	field := newMemberField(goField.Name,
-		GetTypeFromGoType(goField.Type),
+		getTypeFromGoType(goField.Type),
 		goField.Anonymous,
 		goField.Tag,
 		isExportedField(goField))

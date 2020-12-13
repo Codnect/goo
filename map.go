@@ -18,8 +18,8 @@ type mapType struct {
 func newMapType(baseTyp *baseType) Map {
 	return mapType{
 		baseTyp,
-		GetTypeFromGoType(baseTyp.GetGoType().Key()),
-		GetTypeFromGoType(baseTyp.GetGoType().Elem()),
+		getTypeFromGoType(baseTyp.GetGoType().Key()),
+		getTypeFromGoType(baseTyp.GetGoType().Elem()),
 	}
 }
 
