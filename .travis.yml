@@ -5,6 +5,10 @@ go:
   - 1.14.x
   - 1.15.x
 
+env:
+  - GOARCH=amd64
+  - GOARCH=386
+
 branches:
   only:
     - master
