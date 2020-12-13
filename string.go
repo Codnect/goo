@@ -115,7 +115,12 @@ func (str stringType) ToUint(val string) uint {
 	if err != nil {
 		panic(err)
 	}
-	return result.(uint)
+
+	if sizeInBits == 32 {
+		return result.(uint)
+	}
+	lastValue := result.(uint64)
+	return uint(lastValue)
 }
 
 func (str stringType) ToUint8(val string) uint8 {
