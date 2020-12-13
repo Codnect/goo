@@ -55,11 +55,6 @@ func (integer signedIntegerType) GetType() NumberType {
 
 func (integer signedIntegerType) GetBitSize() BitSize {
 	switch integer.kind {
-	case reflect.Int:
-		if bits.UintSize == 32 {
-			return BitSize32
-		}
-		return BitSize64
 	case reflect.Int64:
 		return BitSize64
 	case reflect.Int8:
@@ -68,8 +63,12 @@ func (integer signedIntegerType) GetBitSize() BitSize {
 		return BitSize16
 	case reflect.Int32:
 		return BitSize32
+	default:
+		if bits.UintSize == 32 {
+			return BitSize32
+		}
+		return BitSize64
 	}
-	panic("this is not a signed integer type")
 }
 
 func (integer signedIntegerType) IsSigned() bool {
@@ -117,11 +116,6 @@ func (integer unsignedIntegerType) GetType() NumberType {
 
 func (integer unsignedIntegerType) GetBitSize() BitSize {
 	switch integer.kind {
-	case reflect.Uint:
-		if bits.UintSize == 32 {
-			return BitSize32
-		}
-		return BitSize64
 	case reflect.Uint64:
 		return BitSize64
 	case reflect.Uint8:
@@ -130,8 +124,12 @@ func (integer unsignedIntegerType) GetBitSize() BitSize {
 		return BitSize16
 	case reflect.Uint32:
 		return BitSize32
+	default:
+		if bits.UintSize == 32 {
+			return BitSize32
+		}
+		return BitSize64
 	}
-	panic("this is not a unsigned integer type")
 }
 
 func (integer unsignedIntegerType) IsSigned() bool {
@@ -185,10 +183,9 @@ func (float floatType) GetBitSize() BitSize {
 	switch float.kind {
 	case reflect.Float32:
 		return BitSize32
-	case reflect.Float64:
+	default:
 		return BitSize64
 	}
-	panic("this is not a float type")
 }
 
 func (float floatType) Overflow(val interface{}) bool {
@@ -240,10 +237,9 @@ func (complex complexType) GetBitSize() BitSize {
 	switch complex.kind {
 	case reflect.Complex64:
 		return BitSize64
-	case reflect.Complex128:
+	default:
 		return BitSize128
 	}
-	panic("this is not a complex type")
 }
 
 func (complex complexType) Overflow(val interface{}) bool {
