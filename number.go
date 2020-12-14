@@ -2,6 +2,7 @@ package goo
 
 import (
 	"fmt"
+	"math"
 	"math/bits"
 	"reflect"
 	"strconv"
@@ -85,7 +86,17 @@ func (integer signedIntegerType) Overflow(val interface{}) bool {
 	if err != nil {
 		panic(err)
 	}
-	return integer.GetGoValue().OverflowInt(integerValue)
+
+	bitSize := integer.GetBitSize()
+	overflow := false
+	if BitSize8 == bitSize && (math.MinInt8 > integerValue || math.MaxInt8 < integerValue) {
+		overflow = true
+	} else if BitSize16 == bitSize && (math.MinInt16 > integerValue || math.MaxInt16 < integerValue) {
+		overflow = true
+	} else if BitSize32 == bitSize && (math.MinInt32 > integerValue || math.MaxInt32 < integerValue) {
+		overflow = true
+	}
+	return overflow
 }
 
 func (integer signedIntegerType) NewInstance() interface{} {
@@ -146,7 +157,17 @@ func (integer unsignedIntegerType) Overflow(val interface{}) bool {
 	if err != nil {
 		panic(err)
 	}
-	return integer.GetGoValue().OverflowUint(integerValue)
+
+	bitSize := integer.GetBitSize()
+	overflow := false
+	if BitSize8 == bitSize && math.MaxUint8 < integerValue {
+		overflow = true
+	} else if BitSize16 == bitSize && math.MaxUint16 < integerValue {
+		overflow = true
+	} else if BitSize32 == bitSize && math.MaxUint32 < integerValue {
+		overflow = true
+	}
+	return overflow
 }
 
 func (integer unsignedIntegerType) NewInstance() interface{} {
@@ -198,7 +219,15 @@ func (float floatType) Overflow(val interface{}) bool {
 	if err != nil {
 		panic(err)
 	}
-	return float.GetGoValue().OverflowFloat(floatValue)
+
+	bitSize := float.GetBitSize()
+	overflow := false
+	if BitSize32 == bitSize && math.MaxFloat32 < floatValue {
+		overflow = true
+	} else if BitSize64 == bitSize && math.MaxFloat64 < floatValue {
+		overflow = true
+	}
+	return overflow
 }
 
 func (float floatType) NewInstance() interface{} {

@@ -229,3 +229,7 @@ func isComplex(typ reflect.Type) bool {
 	}
 	return false
 }
+
+func isSignedIntegerOverflow(val int64) {
+
+}

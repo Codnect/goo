@@ -204,6 +204,7 @@ func (str stringType) getIntegerValueByBitSize(strValue string, bitSize BitSize,
 	if BitSize128 == bitSize {
 		panic("BitSize does not support 128")
 	}
+
 	var signedValue int64
 	var unsignedValue uint64
 	if isSigned {
@@ -214,6 +215,7 @@ func (str stringType) getIntegerValueByBitSize(strValue string, bitSize BitSize,
 	if err != nil {
 		return nil, err
 	}
+
 	overflow := false
 	if isSigned {
 		if BitSize8 == bitSize && (math.MinInt8 > signedValue || math.MaxInt8 < signedValue) {
@@ -232,9 +234,11 @@ func (str stringType) getIntegerValueByBitSize(strValue string, bitSize BitSize,
 			overflow = true
 		}
 	}
+
 	if overflow {
 		return nil, errors.New("the given value is out of range of the integer type")
 	}
+
 	if isSigned {
 		if BitSize8 == bitSize {
 			return int8(signedValue), nil
